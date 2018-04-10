@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.chemdbmanager.dbresult &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.chemdbmanager.dbresult</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.chemdbmanager.dbresult</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.chemdbmanager.dbresult</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Wed Oct 05 15:01:29 2016</span>
+
+<span class="sd">@author: ilaponog</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#import os;</span>
+<span class="kn">import</span> <span class="nn">bisect</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span><span class="p">;</span>
+<span class="c1">#from database import DBase;</span>
+
+<div class="viewcode-block" id="DBQueryResult"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.dbresult.DBQueryResult">[docs]</a><span class="k">class</span> <span class="nc">DBQueryResult</span><span class="p">:</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">results_limit</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_limit</span><span class="o">=</span><span class="n">results_limit</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="o">=</span><span class="p">[];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mol_scores</span><span class="o">=</span><span class="p">[];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minscore</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addition_type</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="c1">#self.maxscore=0;</span>
+        
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">;</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>        
+        
+<div class="viewcode-block" id="DBQueryResult.add"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.dbresult.DBQueryResult.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">delta_ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">,</span> <span class="n">total_score</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addition_type</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">db_iterator</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">retrieve_records</span><span class="p">(</span><span class="n">mz</span><span class="p">,</span> <span class="n">delta_ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">);</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">db_iterator</span><span class="p">:</span>
+            <span class="n">tot_score_value</span><span class="o">=</span><span class="n">total_score</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;Scores&#39;</span><span class="p">]);</span>
+            <span class="c1">#print(tot_score_value);</span>
+            <span class="k">if</span> <span class="n">tot_score_value</span><span class="o">&gt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">_minscore</span><span class="p">:</span>            
+                <span class="n">insertindex</span><span class="o">=</span><span class="n">bisect</span><span class="o">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mol_scores</span><span class="p">,</span><span class="n">tot_score_value</span><span class="p">);</span>
+                <span class="c1">#print(insertindex);</span>
+                <span class="n">record</span><span class="p">[</span><span class="s1">&#39;TotalScore&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">tot_score_value</span><span class="p">;</span>
+                <span class="n">record</span><span class="p">[</span><span class="s1">&#39;DBIndex&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">db_index</span><span class="p">;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">insertindex</span><span class="p">,</span><span class="n">record</span><span class="p">);</span>
+                <span class="c1">#print(self.mol_list);</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mol_scores</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">insertindex</span><span class="p">,</span><span class="n">tot_score_value</span><span class="p">);</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_limit</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="p">)</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">results_limit</span><span class="p">:</span>
+                        <span class="n">_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+                        <span class="n">_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mol_scores</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_minscore</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_mol_scores</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span></div>
+        
+<div class="viewcode-block" id="DBQueryResult.addbulk"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.dbresult.DBQueryResult.addbulk">[docs]</a>    <span class="k">def</span> <span class="nf">addbulk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">delta_ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">,</span> <span class="n">total_score</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addition_type</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">db_iterator</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">retrieve_records</span><span class="p">(</span><span class="n">mz</span><span class="p">,</span> <span class="n">delta_ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">);</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">db_iterator</span><span class="p">:</span>
+            <span class="n">tot_score_value</span><span class="o">=</span><span class="n">total_score</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;Scores&#39;</span><span class="p">]);</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;TotalScore&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">tot_score_value</span><span class="p">;</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;DBIndex&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">db_index</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">);</span></div>
+            
+                
+<div class="viewcode-block" id="DBQueryResult.cleanup_results"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.dbresult.DBQueryResult.cleanup_results">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">addition_type</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="p">));</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_limit</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="s1">&#39;TotalScore&#39;</span><span class="p">),</span><span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">results_limit</span><span class="p">];</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mol_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="s1">&#39;TotalScore&#39;</span><span class="p">),</span><span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span>                </div></div>
+            
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

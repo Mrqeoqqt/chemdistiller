@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.filters.inchifilter &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.filters.inchifilter</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.filters.inchifilter</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.filters.inchifilter</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Fri Oct 07 15:03:03 2016</span>
+
+<span class="sd">@author: Dr. Ivan Laponogov</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">#match_type - 0 - soft, 1 - subclass of ref, 2 - subclass of test, 3 - strict masked, 4 - strict </span>
+
+<div class="viewcode-block" id="InChisFilter"><a class="viewcode-back" href="../../../chemdistiller.filters.html#chemdistiller.filters.inchifilter.InChisFilter">[docs]</a><span class="k">class</span> <span class="nc">InChisFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_inchi</span><span class="p">,</span> <span class="n">use_short_inchi</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="o">=</span><span class="n">ref_inchi</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="s1">&#39;1S&#39;</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_short_inchi</span><span class="o">=</span><span class="n">use_short_inchi</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">match_type</span><span class="o">=</span><span class="n">match_type</span><span class="p">;</span>
+    
+<div class="viewcode-block" id="InChisFilter.rejected"><a class="viewcode-back" href="../../../chemdistiller.filters.html#chemdistiller.filters.inchifilter.InChisFilter.rejected">[docs]</a>    <span class="k">def</span> <span class="nf">rejected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testrecord</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_short_inchi</span><span class="p">:</span>
+            <span class="n">testinchi</span><span class="o">=</span><span class="n">testrecord</span><span class="p">[</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">];</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">testinchi</span><span class="o">=</span><span class="n">testrecord</span><span class="p">[</span><span class="s1">&#39;InChi&#39;</span><span class="p">];</span>
+        <span class="n">result</span><span class="o">=</span><span class="bp">False</span><span class="p">;</span>
+        <span class="n">testinchi</span><span class="o">=</span><span class="n">testinchi</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_type</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">ml</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">));</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ml</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">s1</span><span class="o">=</span><span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="n">s2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)):</span>
+                            <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;?&#39;</span> <span class="ow">and</span> <span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;?&#39;</span><span class="p">:</span>
+                                    <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_type</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+            <span class="n">ml</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">));</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ml</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">s1</span><span class="o">=</span><span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="n">s2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)):</span>
+                            <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;?&#39;</span><span class="p">:</span>
+                                    <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>            
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_type</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">)</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+            <span class="n">ml</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">));</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ml</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">s1</span><span class="o">=</span><span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="n">s2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)):</span>
+                            <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                                <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;?&#39;</span><span class="p">:</span>
+                                    <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>            
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_type</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                        <span class="n">s1</span><span class="o">=</span><span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                        <span class="n">s2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span>
+                            <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)):</span>
+                                <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                                    <span class="k">if</span> <span class="n">s1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;?&#39;</span> <span class="ow">and</span> <span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;?&#39;</span><span class="p">:</span>
+                                        <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+                    
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">testinchi</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">testinchi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_inchi</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                        <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+                
+        
+        
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div></div>
+
+
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Soft, InChi&#39;</span><span class="p">);</span>
+    <span class="n">test</span><span class="o">=</span><span class="n">InChisFilter</span><span class="p">(</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">);</span>  
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?K&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-3&#39;</span><span class="p">}));</span>
+    
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Strict, InChi&#39;</span><span class="p">);</span>
+    <span class="n">test</span><span class="o">=</span><span class="n">InChisFilter</span><span class="p">(</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="mi">4</span><span class="p">);</span>  
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?K&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-3&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">}));</span>    
+    
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Strict Masked, InChi&#39;</span><span class="p">);</span>
+    <span class="n">test</span><span class="o">=</span><span class="n">InChisFilter</span><span class="p">(</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="mi">3</span><span class="p">);</span>  
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?K&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-3&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;InChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">}));</span>    
+    
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;SubClass of ref, ShortInChi&#39;</span><span class="p">);</span>
+    <span class="n">test</span><span class="o">=</span><span class="n">InChisFilter</span><span class="p">(</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">,</span> <span class="n">use_short_inchi</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>  
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?K&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-3&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">}));</span>        
+    <span class="n">test</span><span class="o">=</span><span class="n">InChisFilter</span><span class="p">(</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">,</span> <span class="n">use_short_inchi</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>  
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?K&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-3&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2/h1&#39;</span><span class="p">}));</span>
+    
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;SubClass of test, ShortInChi&#39;</span><span class="p">);</span>
+    <span class="n">test</span><span class="o">=</span><span class="n">InChisFilter</span><span class="p">(</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">,</span> <span class="n">use_short_inchi</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>  
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?K&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-3&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">}));</span>        
+    <span class="n">test</span><span class="o">=</span><span class="n">InChisFilter</span><span class="p">(</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">,</span> <span class="n">use_short_inchi</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>  
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5O?K&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-?&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-3&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2&#39;</span><span class="p">}));</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">rejected</span><span class="p">({</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">:</span><span class="s1">&#39;C2H5OH/c1-2/h1&#39;</span><span class="p">}));</span>
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

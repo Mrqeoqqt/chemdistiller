@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.msspectra.adducts &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.msspectra.adducts</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.msspectra.adducts</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.msspectra.adducts</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Tue Nov 15 15:06:32 2016</span>
+
+<span class="sd">@author: Dr. Ivan Laponogov</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Adduct"><a class="viewcode-back" href="../../../chemdistiller.msspectra.html#chemdistiller.msspectra.adducts.Adduct">[docs]</a><span class="k">class</span> <span class="nc">Adduct</span><span class="p">:</span>
+    <span class="c1">#mode, text definition, extra mass, multiplier, charge before adduct formation</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adduct_definition</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;[M+H]+&#39;</span><span class="p">,</span> <span class="mf">1.007276</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="o">=</span><span class="n">adduct_definition</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">adduct_definition</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__substr</span><span class="o">=</span><span class="n">adduct_definition</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mult</span><span class="o">=</span><span class="n">adduct_definition</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">charge</span><span class="o">=</span><span class="n">adduct_definition</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+        
+        
+<div class="viewcode-block" id="Adduct.get_mass"><a class="viewcode-back" href="../../../chemdistiller.msspectra.html#chemdistiller.msspectra.adducts.Adduct.get_mass">[docs]</a>    <span class="k">def</span> <span class="nf">get_mass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mz</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">mz</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">__substr</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__mult</span><span class="p">;</span></div>
+
+<div class="viewcode-block" id="Adduct.get_mz"><a class="viewcode-back" href="../../../chemdistiller.msspectra.html#chemdistiller.msspectra.adducts.Adduct.get_mz">[docs]</a>    <span class="k">def</span> <span class="nf">get_mz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mass</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mass</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">__mult</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__substr</span><span class="p">;</span></div></div>
+        
+        
+
+<span class="c1"># http://fiehnlab.ucdavis.edu/staff/kind/Metabolomics/MS-Adduct-Calculator/</span>
+<span class="c1">#</span>
+<span class="c1">#Huang N.; Siegel M.M.1; Kruppa G.H.; Laukien F.H.; J Am Soc Mass Spectrom 1999, 10, 1166–1173; </span>
+<span class="c1">#Automation of a Fourier transform ion cyclotron resonance mass spectrometer for acquisition, </span>
+<span class="c1">#analysis, and e-mailing of high-resolution exact-mass electrospray ionization mass spectral data.</span>
+<span class="c1">#</span>
+<span class="c1">#Interferences and contaminants encountered in modern mass spectrometry (Bernd O. Keller, Jie Sui, </span>
+<span class="c1">#Alex B. Young and Randy M. Whittal, ANALYTICA CHIMICA ACTA, 627 (1): 71-81)</span>
+
+    
+<span class="n">positive_mode_adducts</span><span class="o">=</span><span class="p">[</span>
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M]+&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+3H]3+&#39;</span><span class="p">,</span> <span class="mf">1.007276</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+2H+Na]3+&#39;</span><span class="p">,</span><span class="mf">8.334590</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+H+2Na]3+&#39;</span><span class="p">,</span><span class="mf">15.7661904</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+3Na]3+&#39;</span><span class="p">,</span><span class="mf">22.989218</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+2H]2+&#39;</span><span class="p">,</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+H+NH4]2+&#39;</span><span class="p">,</span><span class="mf">9.520550</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+H+Na]2+&#39;</span><span class="p">,</span><span class="mf">11.998247</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+H+K]2+&#39;</span><span class="p">,</span><span class="mf">19.985217</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+CH3CN+2H]2+&#39;</span><span class="p">,</span><span class="mf">21.520550</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+2Na]2+&#39;</span><span class="p">,</span><span class="mf">22.989218</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+2CH3CN+2H]2+&#39;</span><span class="p">,</span><span class="mf">42.033823</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+3CH3CN+2H]2+&#39;</span><span class="p">,</span><span class="mf">62.547097</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+H]+&#39;</span><span class="p">,</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+NH4]+&#39;</span><span class="p">,</span><span class="mf">18.033823</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+Na]+&#39;</span><span class="p">,</span><span class="mf">22.989218</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+CH3OH+H]+&#39;</span><span class="p">,</span><span class="mf">33.033489</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+K]+&#39;</span><span class="p">,</span><span class="mf">38.963158</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+CH3CN+H]+&#39;</span><span class="p">,</span><span class="mf">42.033823</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+2Na-H]+&#39;</span><span class="p">,</span><span class="mf">44.971160</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+C3H7OH+H]+&#39;</span><span class="p">,</span><span class="mf">61.06534</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+CH3CN+Na]+&#39;</span><span class="p">,</span><span class="mf">64.015765</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+2K-H]+&#39;</span><span class="p">,</span><span class="mf">76.919040</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+C2H6OS+H]+&#39;</span><span class="p">,</span><span class="mf">79.02122</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+2CH3CN+H]+&#39;</span><span class="p">,</span><span class="mf">83.060370</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+C3H7OH+Na+H]+&#39;</span><span class="p">,</span><span class="mf">84.05511</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+H]+&#39;</span><span class="p">,</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+NH4]+&#39;</span><span class="p">,</span><span class="mf">18.033823</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+Na]+&#39;</span><span class="p">,</span><span class="mf">22.989218</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+K]+&#39;</span><span class="p">,</span><span class="mf">38.963158</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+CH3CN+H]+&#39;</span><span class="p">,</span><span class="mf">42.033823</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+CH3CN+Na]+&#39;</span><span class="p">,</span><span class="mf">64.015765</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="p">];</span>
+
+<span class="n">negative_mode_adducts</span><span class="o">=</span><span class="p">[</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M]-&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M-H]-&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M-3H]3-&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M-2H]2-&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M-H2O-H]-&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">19.01839</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+Na-2H]-&#39;</span><span class="p">,</span> <span class="mf">20.974666</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+Cl]-&#39;</span><span class="p">,</span> <span class="mf">34.969402</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+K-2H]-&#39;</span><span class="p">,</span> <span class="mf">36.948606</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+HCOOH-H]-&#39;</span><span class="p">,</span> <span class="mf">44.998201</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+CH3COOH-H]-&#39;</span><span class="p">,</span> <span class="mf">59.013851</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+Br]-&#39;</span><span class="p">,</span> <span class="mf">78.918885</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[M+C2HF3O2-H]-&#39;</span><span class="p">,</span> <span class="mf">112.985586</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M-H]-&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+HCOOH-H]-&#39;</span><span class="p">,</span> <span class="mf">44.998201</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[2M+CH3COOH-H]-&#39;</span><span class="p">,</span> <span class="mf">59.013851</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="n">Adduct</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;[3M-H]-&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.007276</span><span class="p">,</span> <span class="mf">1.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>\
+<span class="p">];</span>
+
+
+<div class="viewcode-block" id="get_adduct_by_name"><a class="viewcode-back" href="../../../chemdistiller.msspectra.html#chemdistiller.msspectra.adducts.get_adduct_by_name">[docs]</a><span class="k">def</span> <span class="nf">get_adduct_by_name</span><span class="p">(</span><span class="n">adduct_name</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="n">result</span><span class="o">=</span><span class="bp">None</span><span class="p">;</span>
+    <span class="n">lst</span><span class="o">=</span><span class="bp">None</span><span class="p">;</span>
+    <span class="k">if</span> <span class="n">mode</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">lst</span><span class="o">=</span><span class="n">negative_mode_adducts</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">mode</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">lst</span><span class="o">=</span><span class="n">positive_mode_adducts</span><span class="p">;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">lst</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">definition</span><span class="o">==</span><span class="n">adduct_name</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+        
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+    
+
+<div class="viewcode-block" id="get_positive_mode_adducts"><a class="viewcode-back" href="../../../chemdistiller.msspectra.html#chemdistiller.msspectra.adducts.get_positive_mode_adducts">[docs]</a><span class="k">def</span> <span class="nf">get_positive_mode_adducts</span><span class="p">(</span><span class="n">adducts</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+    <span class="k">for</span> <span class="n">adduct</span> <span class="ow">in</span> <span class="n">positive_mode_adducts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">adduct</span><span class="o">.</span><span class="n">definition</span> <span class="ow">in</span> <span class="n">adducts</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adduct</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>        </div>
+
+
+<div class="viewcode-block" id="get_negative_mode_adducts"><a class="viewcode-back" href="../../../chemdistiller.msspectra.html#chemdistiller.msspectra.adducts.get_negative_mode_adducts">[docs]</a><span class="k">def</span> <span class="nf">get_negative_mode_adducts</span><span class="p">(</span><span class="n">adducts</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+    <span class="k">for</span> <span class="n">adduct</span> <span class="ow">in</span> <span class="n">negative_mode_adducts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">adduct</span><span class="o">.</span><span class="n">definition</span> <span class="ow">in</span> <span class="n">adducts</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adduct</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>        </div>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">positive_mode_adducts</span><span class="p">)):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">positive_mode_adducts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">definition</span><span class="p">);</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">negative_mode_adducts</span><span class="p">)):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">negative_mode_adducts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">definition</span><span class="p">);</span>        
+        
+    <span class="k">print</span><span class="p">(</span><span class="n">get_adduct_by_name</span><span class="p">(</span><span class="s1">&#39;[M+H]+&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">definition</span><span class="p">);</span>
+    
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

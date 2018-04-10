@@ -1,0 +1,22 @@
+chemdistiller.scorers.elementscorer package
+===========================================
+
+Submodules
+----------
+
+chemdistiller.scorers.elementscorer.elementscorer module
+--------------------------------------------------------
+
+.. automodule:: chemdistiller.scorers.elementscorer.elementscorer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: chemdistiller.scorers.elementscorer
+    :members:
+    :undoc-members:
+    :show-inheritance:

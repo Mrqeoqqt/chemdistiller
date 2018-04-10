@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.scorers.fingerprint &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.scorers.fingerprint</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.scorers.fingerprint</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.scorers.fingerprint</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Fri Oct 07 15:03:03 2016</span>
+
+<span class="sd">@author: Dr. Ivan Laponogov</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="p">;</span>
+
+<span class="kn">from</span> <span class="nn">chemdistiller.settings</span> <span class="kn">import</span> <span class="n">test_as_single_process</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">multiprocessing</span><span class="p">;</span>
+
+
+
+<div class="viewcode-block" id="generate_fpt_vectors"><a class="viewcode-back" href="../../../chemdistiller.scorers.html#chemdistiller.scorers.fingerprint.generate_fpt_vectors">[docs]</a><span class="k">def</span> <span class="nf">generate_fpt_vectors</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">overwrite</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span><span class="s1">&#39;fpt_sparce_vector&#39;</span><span class="p">):</span>
+            <span class="k">return</span><span class="p">;</span>
+    
+    <span class="n">subcount</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">20000</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">);</span>
+    <span class="n">values</span><span class="o">=</span><span class="p">[];</span>
+    <span class="k">for</span> <span class="n">subspectrum</span> <span class="ow">in</span> <span class="n">peak</span><span class="o">.</span><span class="n">ms_spectra</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">subspectrum</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+             <span class="n">subspectrum</span><span class="o">.</span><span class="n">normalize_to_one</span><span class="p">();</span>
+             <span class="n">subcount</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+             <span class="k">for</span> <span class="n">subpeak</span> <span class="ow">in</span> <span class="n">subspectrum</span><span class="o">.</span><span class="n">peaks</span><span class="p">:</span>
+                 <span class="n">mzi</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">subpeak</span><span class="o">.</span><span class="n">mz</span><span class="o">*</span><span class="mi">10</span><span class="p">);</span>
+                 <span class="n">vector</span><span class="p">[</span><span class="n">mzi</span><span class="p">]</span><span class="o">+=</span><span class="n">subpeak</span><span class="o">.</span><span class="n">intensity</span><span class="p">;</span>
+    <span class="k">if</span> <span class="n">subcount</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20000</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">vector</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="n">vector</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">subcount</span><span class="p">));</span>
+    
+    <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">20000</span><span class="p">,</span><span class="mf">0.0</span><span class="p">));</span>
+             
+    <span class="n">peak</span><span class="o">.</span><span class="n">fpt_sparse_vector</span><span class="o">=</span><span class="n">values</span><span class="p">;</span></div>
+        
+        
+    
+<div class="viewcode-block" id="predict_fingerprints"><a class="viewcode-back" href="../../../chemdistiller.scorers.html#chemdistiller.scorers.fingerprint.predict_fingerprints">[docs]</a><span class="k">def</span> <span class="nf">predict_fingerprints</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">fingerprint_model_path</span><span class="p">,</span> <span class="n">nproc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_index</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">test_as_single_process</span><span class="p">;</span>
+    <span class="k">if</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">:</span>
+            <span class="n">generate_fpt_vectors</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">);</span>
+        <span class="c1">#Do sequential fingerprint prediction from spectra here</span>
+        <span class="c1">#Consider batch index, Negative/Positive mode</span>
+            
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Implement multiprocessing here!&#39;</span><span class="p">);</span></div>
+    
+        
+    <span class="c1">#do parallel fingerprint prediction from spectra here.</span>
+
+
+
+
+<div class="viewcode-block" id="FingerPrintScorer"><a class="viewcode-back" href="../../../chemdistiller.scorers.html#chemdistiller.scorers.fingerprint.FingerPrintScorer">[docs]</a><span class="k">class</span> <span class="nc">FingerPrintScorer</span><span class="p">:</span>
+    <span class="n">supported_adducts</span><span class="o">=</span><span class="nb">set</span><span class="p">([</span><span class="s1">&#39;[M+H]+&#39;</span><span class="p">,</span><span class="s1">&#39;[M-H]-&#39;</span><span class="p">]);</span>
+    <span class="n">supported_isotopes</span><span class="o">=</span><span class="nb">set</span><span class="p">([</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="n">required_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Frag&#39;</span><span class="p">];</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supported_adducts</span><span class="o">=</span><span class="n">FingerPrintScorer</span><span class="o">.</span><span class="n">supported_adducts</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="o">=</span><span class="n">FingerPrintScorer</span><span class="o">.</span><span class="n">required_fields</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supported_isotopes</span><span class="o">=</span><span class="n">FingerPrintScorer</span><span class="o">.</span><span class="n">supported_isotopes</span><span class="p">;</span>
+
+        
+<div class="viewcode-block" id="FingerPrintScorer.close"><a class="viewcode-back" href="../../../chemdistiller.scorers.html#chemdistiller.scorers.fingerprint.FingerPrintScorer.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span></div>
+
+
+<div class="viewcode-block" id="FingerPrintScorer.configure_scorer"><a class="viewcode-back" href="../../../chemdistiller.scorers.html#chemdistiller.scorers.fingerprint.FingerPrintScorer.configure_scorer">[docs]</a>    <span class="k">def</span> <span class="nf">configure_scorer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peak</span><span class="p">,</span> <span class="n">annotation</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">peak</span><span class="o">=</span><span class="n">peak</span><span class="p">;</span></div>
+        <span class="c1">#return 0 if accepted, error code otherwise</span>
+            
+        
+        
+<div class="viewcode-block" id="FingerPrintScorer.process_molecular_candidate_record"><a class="viewcode-back" href="../../../chemdistiller.scorers.html#chemdistiller.scorers.fingerprint.FingerPrintScorer.process_molecular_candidate_record">[docs]</a>    <span class="k">def</span> <span class="nf">process_molecular_candidate_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_data_base</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+        <span class="n">testvector</span><span class="o">=</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;FPT&#39;</span><span class="p">];</span>
+        
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span></div></div>
+            
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+        <span class="n">multiprocessing</span><span class="o">.</span><span class="n">freeze_support</span><span class="p">();</span>
+    
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.chemdbmanager.chemdatabasemanager &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.chemdbmanager.chemdatabasemanager</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.chemdbmanager.chemdatabasemanager</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.chemdbmanager.chemdatabasemanager</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Tue Oct 04 22:26:27 2016</span>
+
+<span class="sd">Chemical Database Manager.</span>
+
+<span class="sd">@author: Dr. Ivan Laponogov</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">byteorder</span><span class="o">!=</span><span class="s1">&#39;little&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Only little endian machines currently supported! bye bye ....&#39;</span><span class="p">);</span>
+    <span class="n">quit</span><span class="p">();</span>
+
+<span class="c1">#import numpy as np;</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">database</span> <span class="kn">import</span> <span class="n">DBase</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">dbresult</span> <span class="kn">import</span> <span class="n">DBQueryResult</span><span class="p">;</span>
+<span class="c1">#from chemdbutilities.periodictableutils import full_periodic_table_filter;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.scorers.totalscorefuntion</span> <span class="kn">import</span> <span class="n">total_multiplicative_score</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.filters.elementsfilter</span> <span class="kn">import</span> <span class="n">CHNOPS_filter</span><span class="p">,</span> <span class="n">CHNOPS_halogens_filter</span><span class="p">,</span> <span class="n">ElementCompositionFilter</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.filters.formulasfilter</span> <span class="kn">import</span> <span class="n">FormulasFilter</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.scorers.formulascorer.formulascorer</span> <span class="kn">import</span> <span class="n">FormulaScorer</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.scorers.elementscorer.elementscorer</span> <span class="kn">import</span> <span class="n">ElementScorer</span><span class="p">;</span>
+
+
+<div class="viewcode-block" id="DBManager"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager">[docs]</a><span class="k">class</span> <span class="nc">DBManager</span><span class="p">:</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_list_file</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">database_list_file</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">subpath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">();</span>
+            <span class="c1">#print(subpath);</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subpath</span><span class="p">,</span><span class="s1">&#39;databases.list&#39;</span><span class="p">)):</span>
+                <span class="n">database_list_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subpath</span><span class="p">,</span><span class="s1">&#39;databases.list&#39;</span><span class="p">);</span>
+            <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subpath</span><span class="p">,</span><span class="s1">&#39;data/databases.list&#39;</span><span class="p">))):</span>
+                <span class="n">database_list_file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subpath</span><span class="p">,</span><span class="s1">&#39;data/databases.list&#39;</span><span class="p">));</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;databases.list not found in </span><span class="si">%s</span><span class="s1"> or </span><span class="si">%s</span><span class="s1">!&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">subpath</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subpath</span><span class="p">,</span><span class="s1">&#39;Data&#39;</span><span class="p">))));</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="o">=</span><span class="p">[];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_databases</span><span class="p">(</span><span class="n">database_list_file</span><span class="p">);</span>
+        
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">;</span>
+
+<div class="viewcode-block" id="DBManager.close"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">();</span></div>
+        
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+        
+<div class="viewcode-block" id="DBManager.initialize_databases"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.initialize_databases">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_list_file</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">database_list_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">dbpath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">));</span>
+                <span class="c1">#print(dbpath);</span>
+                <span class="n">dbase</span><span class="o">=</span><span class="n">DBase</span><span class="p">(</span><span class="n">dbpath</span><span class="p">);</span>
+                <span class="k">if</span> <span class="n">dbase</span><span class="o">.</span><span class="n">db_format</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">dbase</span><span class="o">.</span><span class="n">db_format</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dbase</span><span class="p">);</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">db_index</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> - Wrong DB format. Ignored.&#39;</span><span class="o">%</span><span class="n">dbpath</span><span class="p">);</span></div>
+                
+<div class="viewcode-block" id="DBManager.get_database_names"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_name</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+    
+<div class="viewcode-block" id="DBManager.get_database_fullnames"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_fullnames">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_fullnames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_fullname</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_fullname</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+        
+<div class="viewcode-block" id="DBManager.get_database_descriptions"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_descriptions">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_descriptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_description</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_description</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+
+        
+<div class="viewcode-block" id="DBManager.get_database_licenses"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_licenses">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_licenses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_license</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_license</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+    
+<div class="viewcode-block" id="DBManager.get_database_source_urls"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_source_urls">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_source_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_source_url</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_source_url</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+        
+<div class="viewcode-block" id="DBManager.get_database_citations"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_citations">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_citations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>        
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_citation</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_citation</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+                
+<div class="viewcode-block" id="DBManager.get_database_versions"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_versions">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>        
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_version</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_version</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+        
+<div class="viewcode-block" id="DBManager.get_database_formats"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_formats">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_formats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>        
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_format</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_format</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+        
+
+<div class="viewcode-block" id="DBManager.get_database_subgroups"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_subgroups">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_subgroups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>        
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_subgroupindex</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_subgroupindex</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+    
+<div class="viewcode-block" id="DBManager.get_database_groupnames"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.get_database_groupnames">[docs]</a>    <span class="k">def</span> <span class="nf">get_database_groupnames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbindexes</span><span class="o">=</span><span class="p">[]):</span>        
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">dbindexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">dbindexes</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">db_groupname</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_groupname</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>    </div>
+        
+<div class="viewcode-block" id="DBManager.db_indexes_from_db_names"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.db_indexes_from_db_names">[docs]</a>    <span class="k">def</span> <span class="nf">db_indexes_from_db_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_names_list</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">result</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">if</span> <span class="n">case_sensitive</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="n">db_names_list</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">db_name</span><span class="o">==</span><span class="n">db_name</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_index</span><span class="p">);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="n">db_names_list</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">db_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">==</span><span class="n">db_name</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_index</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div>
+                
+
+<div class="viewcode-block" id="DBManager.query_by_mz_scored"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.chemdatabasemanager.DBManager.query_by_mz_scored">[docs]</a>    <span class="k">def</span> <span class="nf">query_by_mz_scored</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">deltappm</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">db_indexes</span><span class="o">=</span><span class="p">[],</span> <span class="n">filters</span><span class="o">=</span><span class="p">[],</span> <span class="n">scorers</span><span class="o">=</span><span class="p">[],</span> <span class="n">total_score</span><span class="o">=</span><span class="n">total_multiplicative_score</span><span class="p">,</span> <span class="n">required_fields</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">results_limit</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">save_memory</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="c1">#required_fields=set();</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scorers</span><span class="p">:</span>
+            <span class="n">required_fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">required_fields</span><span class="p">);</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="n">required_fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">required_fields</span><span class="p">);</span>
+
+        <span class="n">result</span><span class="o">=</span><span class="n">DBQueryResult</span><span class="p">(</span><span class="n">results_limit</span><span class="p">);</span>
+        
+
+        <span class="k">if</span> <span class="n">db_indexes</span><span class="p">:</span>
+            <span class="c1">#print(&#39;Indexes&#39;)</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">db_indexes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">save_memory</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">mz</span><span class="p">,</span> <span class="n">deltappm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">,</span> <span class="n">total_score</span><span class="p">);</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">addbulk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">mz</span><span class="p">,</span> <span class="n">deltappm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">,</span> <span class="n">total_score</span><span class="p">);</span>                    
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_bases</span><span class="p">:</span>
+                <span class="c1">#print(db.db_name)</span>
+                <span class="k">if</span> <span class="n">save_memory</span><span class="p">:</span>                
+                    <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">deltappm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">,</span> <span class="n">total_score</span><span class="p">);</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">addbulk</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">deltappm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">,</span> <span class="n">total_score</span><span class="p">);</span>
+
+        <span class="n">result</span><span class="o">.</span><span class="n">cleanup_results</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span></div></div>
+    
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>   
+     <span class="n">dbfile</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;../../tests/databases.list&#39;</span><span class="p">);</span>
+     
+     <span class="k">print</span><span class="p">(</span><span class="n">dbfile</span><span class="p">);</span>
+     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">dbfile</span><span class="p">):</span>
+         <span class="n">dbmanager</span><span class="o">=</span><span class="n">DBManager</span><span class="p">(</span><span class="n">dbfile</span><span class="p">);</span>
+         <span class="kn">import</span> <span class="nn">time</span><span class="p">;</span>
+         <span class="n">t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">();</span>
+         <span class="n">test_formulas_filter</span><span class="o">=</span><span class="n">FormulasFilter</span><span class="p">(</span><span class="s1">&#39;H4C4SO,H4C3SiO2&#39;</span><span class="p">);</span>
+         <span class="n">test_formula_scorer</span><span class="o">=</span><span class="n">FormulaScorer</span><span class="p">();</span>
+         <span class="n">test_formula_scorer</span><span class="o">.</span><span class="n">configure_scorer</span><span class="p">(</span><span class="s1">&#39;H4C4SO,H4C3SiO2&#39;</span><span class="p">,[</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span><span class="mf">1.0</span><span class="p">);</span>
+         
+         <span class="n">test_elements_scorer</span><span class="o">=</span><span class="n">ElementScorer</span><span class="p">();</span>
+         <span class="n">test_elements_scorer</span><span class="o">.</span><span class="n">configure_scorer</span><span class="p">({</span><span class="s1">&#39;S&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span><span class="s1">&#39;O&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">,</span><span class="s1">&#39;Si&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">});</span>
+         <span class="k">print</span><span class="p">(</span><span class="n">dbmanager</span><span class="o">.</span><span class="n">db_indexes_from_db_names</span><span class="p">([</span><span class="s1">&#39;PubChem&#39;</span><span class="p">,</span><span class="s1">&#39;EMolecules&#39;</span><span class="p">]));</span>
+         
+         <span class="n">result</span><span class="o">=</span><span class="n">dbmanager</span><span class="o">.</span><span class="n">query_by_mz_scored</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">db_indexes</span><span class="o">=</span><span class="n">dbmanager</span><span class="o">.</span><span class="n">db_indexes_from_db_names</span><span class="p">([</span><span class="s1">&#39;EMolecules&#39;</span><span class="p">,</span><span class="s1">&#39;PubChem&#39;</span><span class="p">],</span><span class="n">case_sensitive</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">test_formulas_filter</span><span class="p">],</span> <span class="n">scorers</span><span class="o">=</span><span class="p">[</span><span class="n">test_formula_scorer</span><span class="p">,</span><span class="n">test_elements_scorer</span><span class="p">],</span> <span class="n">required_fields</span><span class="o">=</span><span class="nb">set</span><span class="p">([</span><span class="s1">&#39;Formula&#39;</span><span class="p">]),</span> <span class="n">results_limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_memory</span><span class="o">=</span><span class="bp">False</span><span class="p">);</span>
+         <span class="n">t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">;</span>
+         <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mol_list</span><span class="p">));</span>
+         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">mol_list</span><span class="p">:</span>
+             <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;MZ&#39;</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;DBIndex&#39;</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;Formula&#39;</span><span class="p">],</span><span class="n">dbmanager</span><span class="o">.</span><span class="n">data_bases</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;DBIndex&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">db_name</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;Scores&#39;</span><span class="p">]);</span>
+         <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+         <span class="c1">#print(len(dbmanager.data_bases));</span>
+         <span class="c1">#for i in dbmanager.data_bases:</span>
+         <span class="c1">#    print(i.db_name)</span>
+         <span class="n">dbmanager</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+     
+
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

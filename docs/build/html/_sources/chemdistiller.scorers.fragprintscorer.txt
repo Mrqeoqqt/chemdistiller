@@ -1,0 +1,29 @@
+chemdistiller.scorers.fragprintscorer package
+=============================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    chemdistiller.scorers.fragprintscorer.fragprintutils
+
+Submodules
+----------
+
+chemdistiller.scorers.fragprintscorer.fragprintscorer module
+------------------------------------------------------------
+
+.. automodule:: chemdistiller.scorers.fragprintscorer.fragprintscorer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: chemdistiller.scorers.fragprintscorer
+    :members:
+    :undoc-members:
+    :show-inheritance:

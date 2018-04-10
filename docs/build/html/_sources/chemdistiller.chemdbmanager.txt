@@ -1,0 +1,45 @@
+chemdistiller.chemdbmanager package
+===================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    chemdistiller.chemdbmanager.chemdbutilities
+
+Submodules
+----------
+
+chemdistiller.chemdbmanager.chemdatabasemanager module
+------------------------------------------------------
+
+.. automodule:: chemdistiller.chemdbmanager.chemdatabasemanager
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+chemdistiller.chemdbmanager.database module
+-------------------------------------------
+
+.. automodule:: chemdistiller.chemdbmanager.database
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+chemdistiller.chemdbmanager.dbresult module
+-------------------------------------------
+
+.. automodule:: chemdistiller.chemdbmanager.dbresult
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: chemdistiller.chemdbmanager
+    :members:
+    :undoc-members:
+    :show-inheritance:

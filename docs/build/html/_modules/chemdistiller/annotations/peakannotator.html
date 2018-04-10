@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.annotations.peakannotator &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.annotations.peakannotator</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.annotations.peakannotator</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.annotations.peakannotator</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Tue Nov 15 13:10:14 2016</span>
+
+<span class="sd">@author: Dr. Ivan Laponogov</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.settings</span> <span class="kn">import</span> <span class="n">test_as_single_process</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.scorers.fragprint</span> <span class="kn">import</span> <span class="n">FragPrintScorer</span><span class="p">,</span> <span class="n">generate_fragment_lists</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.scorers.fingerprint</span> <span class="kn">import</span> <span class="n">FingerPrintScorer</span><span class="p">,</span> <span class="n">predict_fingerprints</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.chemdb.manager</span> <span class="kn">import</span> <span class="n">DBManager</span><span class="p">;</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">multiprocessing</span><span class="p">;</span>
+
+
+<span class="kn">from</span> <span class="nn">chemdistiller.scorers.totalscore</span> <span class="kn">import</span> <span class="n">total_multiplicative_score</span><span class="p">;</span>
+
+
+<div class="viewcode-block" id="annotate_peakblock"><a class="viewcode-back" href="../../../chemdistiller.annotations.html#chemdistiller.annotations.peakannotator.annotate_peakblock">[docs]</a><span class="k">def</span> <span class="nf">annotate_peakblock</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">database_list_file</span><span class="p">,</span> <span class="n">test_chemical_databases</span><span class="p">,</span> <span class="n">scorers_list</span><span class="p">,</span> <span class="n">total_score</span><span class="p">,</span> <span class="n">results_limit</span><span class="p">,</span> <span class="n">save_memory</span><span class="p">,</span> <span class="n">ppm</span><span class="p">,</span> <span class="n">blockindex</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">test_as_single_process</span><span class="p">;</span>
+
+    <span class="c1">#Initialize chemical DB manager</span>
+
+    <span class="k">with</span> <span class="n">DBManager</span><span class="p">(</span><span class="n">database_list_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">dbmanager</span><span class="p">:</span>
+    
+        <span class="n">db_indexes</span><span class="o">=</span><span class="n">dbmanager</span><span class="o">.</span><span class="n">db_indexes_from_db_names</span><span class="p">(</span><span class="n">test_chemical_databases</span><span class="p">,</span><span class="n">case_sensitive</span><span class="o">=</span><span class="bp">True</span><span class="p">);</span>
+        
+        <span class="c1">#Initialize selected scorers</span>
+        <span class="n">available_scorers</span><span class="o">=</span><span class="p">[];</span>
+    
+        <span class="k">if</span> <span class="s1">&#39;FragPrintScorer&#39;</span> <span class="ow">in</span> <span class="n">scorers_list</span><span class="p">:</span>
+            <span class="n">fragprint_scorer</span><span class="o">=</span><span class="n">FragPrintScorer</span><span class="p">(</span><span class="n">blockindex</span><span class="p">);</span>
+            <span class="n">available_scorers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fragprint_scorer</span><span class="p">);</span>
+    
+        <span class="k">if</span> <span class="s1">&#39;FingerPrintScorer&#39;</span> <span class="ow">in</span> <span class="n">scorers_list</span><span class="p">:</span>
+            <span class="n">fingerprint_scorer</span><span class="o">=</span><span class="n">FingerPrintScorer</span><span class="p">();</span>
+            <span class="n">available_scorers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fingerprint_scorer</span><span class="p">);</span>
+
+        <span class="c1"># Score annotations in peaks</span>
+        <span class="k">if</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+            <span class="n">cc</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            
+        <span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+                <span class="n">cc</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Annotating </span><span class="si">%s</span><span class="s1"> of </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)));</span>
+            
+            <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">peak</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+                <span class="c1">#Prepare scorers</span>
+                <span class="n">selected_scorers</span><span class="o">=</span><span class="p">[];</span>
+                <span class="k">for</span> <span class="n">scorer</span> <span class="ow">in</span> <span class="n">available_scorers</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">scorer</span><span class="o">.</span><span class="n">configure_scorer</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="n">selected_scorers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scorer</span><span class="p">);</span>
+                <span class="c1">#Prepare molecular search</span>
+                <span class="n">mz</span><span class="o">=</span><span class="n">annotation</span><span class="o">.</span><span class="n">adduct</span><span class="o">.</span><span class="n">get_mass</span><span class="p">(</span><span class="n">peak</span><span class="o">.</span><span class="n">mz</span><span class="p">);</span>
+                <span class="n">charge</span><span class="o">=</span><span class="n">annotation</span><span class="o">.</span><span class="n">adduct</span><span class="o">.</span><span class="n">charge</span><span class="p">;</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">formula_scorer</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>  <span class="c1">#If formula scorer pre-defined - use it.</span>
+                    <span class="n">selected_scorers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">formula_scorer</span><span class="p">);</span>
+                <span class="c1">#Query chemical database</span>
+                <span class="n">annotation</span><span class="o">.</span><span class="n">mol_candidates</span><span class="o">=</span><span class="n">dbmanager</span><span class="o">.</span><span class="n">query_by_mz_scored</span><span class="p">(</span><span class="n">mz</span><span class="p">,</span> <span class="n">ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">db_indexes</span><span class="p">,</span>\
+                    <span class="n">filters</span><span class="o">=</span><span class="n">annotation</span><span class="o">.</span><span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="o">=</span><span class="n">selected_scorers</span><span class="p">,</span> <span class="n">results_limit</span><span class="o">=</span><span class="n">results_limit</span><span class="p">,</span> <span class="n">save_memory</span><span class="o">=</span><span class="n">save_memory</span><span class="p">);</span>
+        <span class="k">for</span> <span class="n">scorer</span> <span class="ow">in</span> <span class="n">available_scorers</span><span class="p">:</span>
+            <span class="n">scorer</span><span class="o">.</span><span class="n">close</span><span class="p">();</span></div>
+
+<div class="viewcode-block" id="PeakAnnotator"><a class="viewcode-back" href="../../../chemdistiller.annotations.html#chemdistiller.annotations.peakannotator.PeakAnnotator">[docs]</a><span class="k">class</span> <span class="nc">PeakAnnotator</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database_list_file</span><span class="p">,</span> <span class="n">fingerprint_model_path</span><span class="p">,</span> <span class="n">nproc</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database_list_file</span><span class="o">=</span><span class="n">database_list_file</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fingerprint_model_path</span><span class="o">=</span><span class="n">fingerprint_model_path</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span><span class="o">=</span><span class="n">nproc</span><span class="p">;</span>
+        
+
+<div class="viewcode-block" id="PeakAnnotator.annotate_peaks"><a class="viewcode-back" href="../../../chemdistiller.annotations.html#chemdistiller.annotations.peakannotator.PeakAnnotator.annotate_peaks">[docs]</a>    <span class="k">def</span> <span class="nf">annotate_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">test_chemical_databases</span><span class="p">,</span> \
+            <span class="n">scorers_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">total_score</span><span class="o">=</span><span class="n">total_multiplicative_score</span><span class="p">,</span>\
+            <span class="n">results_limit</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">save_memory</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">batch_index</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ppm</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+        <span class="k">global</span> <span class="n">test_as_single_process</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Preparing peak blocks...&#39;</span><span class="p">);</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">peakblocks</span><span class="o">=</span><span class="p">[];</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nproc</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">peakblocks</span><span class="o">.</span><span class="n">append</span><span class="p">([]);</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">peakblocks</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">nproc</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_chemical_databases</span><span class="o">=</span><span class="n">test_chemical_databases</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scorers_list</span><span class="o">=</span><span class="n">scorers_list</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_score</span><span class="o">=</span><span class="n">total_score</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_limit</span><span class="o">=</span><span class="n">results_limit</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_memory</span><span class="o">=</span><span class="n">save_memory</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_index</span><span class="o">=</span><span class="n">batch_index</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ppm</span><span class="o">=</span><span class="n">ppm</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span><span class="p">;</span>
+        
+
+        <span class="k">if</span> <span class="s1">&#39;FingerPrintScorer&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scorers_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Preparing FingerPrintScorer...&#39;</span><span class="p">);</span>
+            <span class="n">predict_fingerprints</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fingerprint_model_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overwrite</span><span class="p">);</span>
+        
+        <span class="k">if</span> <span class="s1">&#39;FragPrintScorer&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scorers_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Preparing FragPrintScorer...&#39;</span><span class="p">);</span>
+            <span class="n">generate_fragment_lists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nproc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overwrite</span><span class="p">);</span>
+        
+        <span class="k">if</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+            <span class="n">cc</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">peakblocks</span><span class="p">:</span>
+                <span class="n">cc</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Block </span><span class="si">%s</span><span class="s1"> of </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peakblocks</span><span class="p">)));</span>
+                <span class="n">annotate_peakblock</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_list_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_chemical_databases</span><span class="p">,</span>\
+                    <span class="bp">self</span><span class="o">.</span><span class="n">scorers_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_score</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_limit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_memory</span><span class="p">,</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ppm</span><span class="p">,</span> <span class="n">cc</span><span class="p">);</span>
+                
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Implement multiprocessing here!&#39;</span><span class="p">);</span></div>
+
+        
+        
+        
+<div class="viewcode-block" id="PeakAnnotator.close"><a class="viewcode-back" href="../../../chemdistiller.annotations.html#chemdistiller.annotations.peakannotator.PeakAnnotator.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span></div>
+        
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">;</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">();</span></div>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">test_as_single_process</span><span class="p">:</span>
+        <span class="n">multiprocessing</span><span class="o">.</span><span class="n">freeze_support</span><span class="p">();</span>
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

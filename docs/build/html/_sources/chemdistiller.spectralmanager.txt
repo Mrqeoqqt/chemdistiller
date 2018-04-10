@@ -1,0 +1,38 @@
+chemdistiller.spectralmanager package
+=====================================
+
+Submodules
+----------
+
+chemdistiller.spectralmanager.mspeak module
+-------------------------------------------
+
+.. automodule:: chemdistiller.spectralmanager.mspeak
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+chemdistiller.spectralmanager.spectralmanager module
+----------------------------------------------------
+
+.. automodule:: chemdistiller.spectralmanager.spectralmanager
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+chemdistiller.spectralmanager.spectrum module
+---------------------------------------------
+
+.. automodule:: chemdistiller.spectralmanager.spectrum
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: chemdistiller.spectralmanager
+    :members:
+    :undoc-members:
+    :show-inheritance:

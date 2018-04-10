@@ -1,0 +1,22 @@
+chemdistiller.scorers.formulascorer package
+===========================================
+
+Submodules
+----------
+
+chemdistiller.scorers.formulascorer.formulascorer module
+--------------------------------------------------------
+
+.. automodule:: chemdistiller.scorers.formulascorer.formulascorer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: chemdistiller.scorers.formulascorer
+    :members:
+    :undoc-members:
+    :show-inheritance:

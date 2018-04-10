@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.chemdbmanager.database &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.chemdbmanager.database</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.chemdbmanager.database</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.chemdbmanager.database</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Wed Oct 05 14:16:14 2016</span>
+<span class="sd">DBase class</span>
+
+
+<span class="sd">@author: Dr. Ivan Laponogov</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdbutilities.periodictableutils</span> <span class="kn">import</span> <span class="n">parse_formula</span><span class="p">,</span> <span class="n">formula_to_element_vector</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.utils.base64utils</span> <span class="kn">import</span> <span class="n">decode_from_base64</span><span class="p">;</span>
+<span class="kn">from</span> <span class="nn">chemdistiller.scorers.fragprintscorer.fragprintutils.fragprintutilities</span> <span class="kn">import</span> <span class="n">parse_string_fragments</span><span class="p">,</span> <span class="n">parse_string_fragment_charges</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span><span class="p">;</span>
+
+
+<div class="viewcode-block" id="DBase"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.database.DBase">[docs]</a><span class="k">class</span> <span class="nc">DBase</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">database_path</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database_path</span><span class="o">=</span><span class="n">database_path</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_fullname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_license</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_source_url</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_citation</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_version</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_format</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_subgroupindex</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_groupname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_database</span><span class="p">();</span>
+        <span class="c1">#self.close=self._defclose();</span>
+        
+<div class="viewcode-block" id="DBase.close"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.database.DBase.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span></div>
+        
+    <span class="k">def</span> <span class="nf">_initialize_database</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#print(os.path.join(self.database_path,&#39;dbinfo.dat&#39;));</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database_path</span><span class="p">,</span><span class="s1">&#39;dbinfo.dat&#39;</span><span class="p">)):</span>
+            <span class="c1">#print(&#39;found&#39;);</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database_path</span><span class="p">,</span><span class="s1">&#39;dbinfo.dat&#39;</span><span class="p">),</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+                    <span class="c1">#print(s);</span>
+                    <span class="k">if</span>   <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBNAME&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBFULLNAME&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_fullname</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBDESCRIPTION&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_description</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBLICENSE&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_license</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBSOURCEURL&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_source_url</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBCITATION&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_citation</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBVERSION&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_version</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBFORMAT&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_format</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]);</span>
+                        <span class="c1">#print(self.db_format);</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBSUBGROUPINDEX&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_subgroupindex</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]);</span>
+                    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;DBGROUPNAME&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">db_groupname</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_format</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_raw</span><span class="p">();</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_format</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_binary</span><span class="p">();</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_format</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_hdf5</span><span class="p">();</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Format unsupported!&#39;</span><span class="p">);</span>
+
+        
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">;</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+        
+    <span class="k">def</span> <span class="nf">_close_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;datafile&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+
+        
+    
+    <span class="k">def</span> <span class="nf">_close_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Closed binary&#39;</span><span class="p">);</span>
+    
+    <span class="k">def</span> <span class="nf">_close_hdf5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Closed hdf5&#39;</span><span class="p">);</span>
+        
+    <span class="k">def</span> <span class="nf">_init_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve_records</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_retrieve_records</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next_record</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_next_record</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_raw</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fpt_mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">11416</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">255</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">);</span>
+        
+
+    <span class="k">def</span> <span class="nf">_init_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve_records</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_binary_retrieve_records</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next_record</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_binary_next_record</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_binary</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fpt_mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">11416</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">255</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">);</span>
+        <span class="c1">#Read FPT mask here</span>
+        
+    <span class="k">def</span> <span class="nf">_init_hdf5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve_records</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdf5_retrieve_records</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next_record</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_hdf5_next_record</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_hdf5</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fpt_mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">11416</span><span class="o">//</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">255</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">);</span>
+        <span class="c1">#Read FPT mask here</span>
+
+
+    <span class="k">def</span> <span class="nf">_raw_record_accepted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">record</span><span class="p">):</span>
+        <span class="n">mz</span><span class="o">=</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;MZ&#39;</span><span class="p">];</span>
+        <span class="c1">#print(mz);</span>
+        <span class="k">if</span> <span class="n">mz</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmin</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">mz</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmax</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">();</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">charged</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">charge</span><span class="o">-</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;Charge&#39;</span><span class="p">])</span><span class="o">&gt;</span><span class="mf">1e-8</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span><span class="p">;</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">rejected</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span><span class="p">;</span>
+        <span class="k">return</span> <span class="bp">True</span><span class="p">;</span>
+        
+    <span class="k">def</span> <span class="nf">_get_next_raw_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#print(self.currentfile);</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database_path</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subf</span><span class="p">,</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">//</span><span class="mi">1000</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">1000</span><span class="o">//</span><span class="mi">100</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">100</span><span class="o">//</span><span class="mi">10</span><span class="p">),</span>
+                                          <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.st2&#39;</span><span class="o">%</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">10</span><span class="p">));</span>
+            <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">&lt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmax_int</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database_path</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subf</span><span class="p">,</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">//</span><span class="mi">1000</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">1000</span><span class="o">//</span><span class="mi">100</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">100</span><span class="o">//</span><span class="mi">10</span><span class="p">),</span>
+                                          <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.st2&#39;</span><span class="o">%</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">10</span><span class="p">));</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">&lt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmax_int</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">);</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">();</span>                
+        
+        <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">.</span><span class="n">readline</span><span class="p">();</span>
+        <span class="k">while</span> <span class="n">s</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database_path</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subf</span><span class="p">,</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">//</span><span class="mi">1000</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">1000</span><span class="o">//</span><span class="mi">100</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">100</span><span class="o">//</span><span class="mi">10</span><span class="p">),</span>
+                                          <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.st2&#39;</span><span class="o">%</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">10</span><span class="p">));</span>
+            <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">&lt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmax_int</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database_path</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">subf</span><span class="p">,</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">//</span><span class="mi">1000</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">1000</span><span class="o">//</span><span class="mi">100</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">100</span><span class="o">//</span><span class="mi">10</span><span class="p">),</span>
+                                          <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.st2&#39;</span><span class="o">%</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">%</span><span class="mi">10</span><span class="p">));</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">&lt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmax_int</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">);</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">();</span>                
+            <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">.</span><span class="n">readline</span><span class="p">();</span>
+            
+        <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">);</span>
+        <span class="n">record</span><span class="o">=</span><span class="p">{};</span>
+        <span class="n">record</span><span class="p">[</span><span class="s1">&#39;MZ&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">charged</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;Mass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;Charge&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+        <span class="n">record</span><span class="p">[</span><span class="s1">&#39;ShortInChi&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">];</span>
+        <span class="n">record</span><span class="p">[</span><span class="s1">&#39;InChi&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">];</span>
+        <span class="n">record</span><span class="p">[</span><span class="s1">&#39;SMILES&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">];</span>
+        <span class="n">record</span><span class="p">[</span><span class="s1">&#39;IDs&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">4</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">];</span>
+        <span class="k">if</span> <span class="s1">&#39;FPT&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;FPT&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">decode_from_base64</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">5</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="s1">&#39;Frag&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;Frag&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">6</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">];</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">charged</span><span class="p">:</span>
+                <span class="n">record</span><span class="p">[</span><span class="s1">&#39;FragCharge&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">9</span><span class="p">];</span>
+        <span class="c1">#print(self.required_fields);</span>
+        <span class="k">if</span> <span class="s1">&#39;Formula&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;Formula&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">parse_formula</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="k">if</span> <span class="s1">&#39;ElementVector&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+                <span class="n">record</span><span class="p">[</span><span class="s1">&#39;ElementVector&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">formula_to_element_vector</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;Formula&#39;</span><span class="p">]);</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;ElementVector&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+                <span class="n">record</span><span class="p">[</span><span class="s1">&#39;ElementVector&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">formula_to_element_vector</span><span class="p">(</span><span class="n">parse_formula</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]));</span>
+            
+        <span class="k">return</span> <span class="n">record</span><span class="p">;</span>
+        
+        
+    <span class="k">def</span> <span class="nf">_raw_next_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">record</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_next_raw_record</span><span class="p">();</span>
+        <span class="c1">#print(&#39;%s %s %s %s&#39;%(self.mzmin,self.mzmax,record[&#39;MZ&#39;],self._raw_record_accepted(record)))</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_record_accepted</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+            <span class="n">record</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_next_raw_record</span><span class="p">();</span>
+        <span class="k">if</span> <span class="s1">&#39;Frag&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="s1">&#39;Frag&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">parse_string_fragments</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;Frag&#39;</span><span class="p">]);</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">charged</span><span class="p">:</span>
+                <span class="n">record</span><span class="p">[</span><span class="s1">&#39;FragCharge&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">parse_string_fragment_charges</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="s1">&#39;FragCharge&#39;</span><span class="p">]);</span>
+        <span class="n">record</span><span class="p">[</span><span class="s1">&#39;Scores&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{};</span>
+        <span class="k">for</span> <span class="n">scorer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scorers</span><span class="p">:</span>
+            <span class="n">scorer</span><span class="o">.</span><span class="n">process_molecular_candidate_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">record</span><span class="p">);</span>
+        <span class="c1">#print(&#39;returning&#39;);</span>
+        <span class="k">return</span> <span class="n">record</span><span class="p">;</span>
+        
+    <span class="k">def</span> <span class="nf">_binary_next_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">();</span>        
+
+    <span class="k">def</span> <span class="nf">_hdf5_next_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">();</span>        
+
+
+    <span class="k">def</span> <span class="nf">_raw_retrieve_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">delta_ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">charge</span><span class="o">=</span><span class="n">charge</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">charge</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subf</span><span class="o">=</span><span class="s1">&#39;Negative&#39;</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">charged</span><span class="o">=</span><span class="bp">True</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+        <span class="k">elif</span> <span class="n">charge</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subf</span><span class="o">=</span><span class="s1">&#39;Positive&#39;</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">charged</span><span class="o">=</span><span class="bp">True</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subf</span><span class="o">=</span><span class="s1">&#39;Neutral&#39;</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">charged</span><span class="o">=</span><span class="bp">False</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">offs</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mzmin</span><span class="o">=</span><span class="n">mz</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">1000000.0</span><span class="o">*</span><span class="n">delta_ppm</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mzmax</span><span class="o">=</span><span class="n">mz</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="mf">1000000.0</span><span class="o">*</span><span class="n">delta_ppm</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mzmin_int</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmin</span><span class="o">*</span><span class="mi">100</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mzmax_int</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmax</span><span class="o">*</span><span class="mi">100</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mzcurrent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mzmin_int</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scorers</span><span class="o">=</span><span class="n">scorers</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="o">=</span><span class="n">required_fields</span><span class="p">;</span>
+        <span class="c1">#self._next_record=self._raw_next_record;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;datafile&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">datafile</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentfile</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">DBRecordIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">);</span>
+        
+    <span class="k">def</span> <span class="nf">_binary_retrieve_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">delta_ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">):</span>
+        
+        
+        
+        <span class="k">return</span> <span class="n">DBRecordIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">);</span>
+        
+    <span class="k">def</span> <span class="nf">_hdf5_retrieve_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mz</span><span class="p">,</span> <span class="n">delta_ppm</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scorers</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">):</span>        
+        
+        
+        
+        <span class="k">return</span> <span class="n">DBRecordIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">);</span></div>
+        
+
+
+<div class="viewcode-block" id="DBRecordIterator"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.database.DBRecordIterator">[docs]</a><span class="k">class</span> <span class="nc">DBRecordIterator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">database</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">;</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">;</span>
+
+<div class="viewcode-block" id="DBRecordIterator.next"><a class="viewcode-back" href="../../../chemdistiller.chemdbmanager.html#chemdistiller.chemdbmanager.database.DBRecordIterator.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">_next_record</span><span class="p">();</span></div></div>
+    
+
+
+        
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

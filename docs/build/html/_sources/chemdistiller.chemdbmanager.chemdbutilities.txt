@@ -1,0 +1,22 @@
+chemdistiller.chemdbmanager.chemdbutilities package
+===================================================
+
+Submodules
+----------
+
+chemdistiller.chemdbmanager.chemdbutilities.periodictableutils module
+---------------------------------------------------------------------
+
+.. automodule:: chemdistiller.chemdbmanager.chemdbutilities.periodictableutils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: chemdistiller.chemdbmanager.chemdbutilities
+    :members:
+    :undoc-members:
+    :show-inheritance:

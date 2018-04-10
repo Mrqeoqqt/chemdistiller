@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.scorers.fragprintscorer.fragprintutils.fragprintutilities &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.scorers.fragprintscorer.fragprintutils.fragprintutilities</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.scorers.fragprintscorer.fragprintutils.fragprintutilities</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.scorers.fragprintscorer.fragprintutils.fragprintutilities</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Thu Oct 06 17:58:48 2016</span>
+<span class="sd">Fragmenter Utilities</span>
+<span class="sd">@author: Dr. Ivan Laponogov</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="parse_string_fragments"><a class="viewcode-back" href="../../../../../chemdistiller.scorers.fragprintscorer.fragprintutils.html#chemdistiller.scorers.fragprintscorer.fragprintutils.fragprintutilities.parse_string_fragments">[docs]</a><span class="k">def</span> <span class="nf">parse_string_fragments</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="p">];</span></div>
+    
+<div class="viewcode-block" id="parse_string_fragment_charges"><a class="viewcode-back" href="../../../../../chemdistiller.scorers.fragprintscorer.fragprintutils.html#chemdistiller.scorers.fragprintscorer.fragprintutils.fragprintutilities.parse_string_fragment_charges">[docs]</a><span class="k">def</span> <span class="nf">parse_string_fragment_charges</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">lst</span><span class="o">=</span><span class="p">[];</span>
+    <span class="n">inbracket</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">ss</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="s1">&#39;[&#39;</span><span class="p">:</span>
+            <span class="n">inbracket</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">ss</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">elif</span> <span class="n">i</span><span class="o">==</span><span class="s1">&#39;]&#39;</span><span class="p">:</span>
+            <span class="n">inbracket</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            <span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]);</span>
+            <span class="n">ss</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">elif</span> <span class="n">inbracket</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">ss</span><span class="o">+=</span><span class="n">i</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">lst</span><span class="p">;</span></div>
+    
+    
+    
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">parse_string_fragments</span><span class="p">(</span><span class="s1">&#39;972.547938023,972.547938023,972.524128574,971.540112991&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">parse_string_fragment_charges</span><span class="p">(</span><span class="s1">&#39;[0],[0,-4],[-4,0],[-5],[-5],[-5],[0,-7,-6,-1,-2,-3,-4,-5]&#39;</span><span class="p">))</span>
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.spectralmanager.mspeak &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.spectralmanager.mspeak</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.spectralmanager.mspeak</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.spectralmanager.mspeak</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Tue Oct 11 19:36:52 2016</span>
+
+<span class="sd">@author: ilaponog</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MSPeak"><a class="viewcode-back" href="../../../chemdistiller.spectralmanager.html#chemdistiller.spectralmanager.mspeak.MSPeak">[docs]</a><span class="k">class</span> <span class="nc">MSPeak</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ms_spectra</span><span class="o">=</span><span class="p">[];</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">=</span><span class="p">{};</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mz</span><span class="o">=</span><span class="mf">0.0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intensity</span><span class="o">=</span><span class="mf">0.0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_spectrum</span><span class="o">=</span><span class="bp">None</span><span class="p">;</span>
+
+<div class="viewcode-block" id="MSPeak.close"><a class="viewcode-back" href="../../../chemdistiller.spectralmanager.html#chemdistiller.spectralmanager.mspeak.MSPeak.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">spectrum</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ms_spectra</span><span class="p">:</span>
+            <span class="n">spectrum</span><span class="o">.</span><span class="n">close</span><span class="p">();</span></div>
+        
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">;</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+        
+<div class="viewcode-block" id="MSPeak.add_spectrum"><a class="viewcode-back" href="../../../chemdistiller.spectralmanager.html#chemdistiller.spectralmanager.mspeak.MSPeak.add_spectrum">[docs]</a>    <span class="k">def</span> <span class="nf">add_spectrum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spectrum</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ms_spectra</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spectrum</span><span class="p">);</span>
+        <span class="n">spectrum</span><span class="o">.</span><span class="n">parent_peak</span><span class="o">=</span><span class="bp">self</span><span class="p">;</span></div></div>
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

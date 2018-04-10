@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chemdistiller.utils.base64 &mdash; ChemDistiller 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/theme_extras.js"></script>
+    <link rel="top" title="ChemDistiller 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../../../index.html"
+          title="back to the documentation overview"><span>chemdistiller.utils.base64</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">chemdistiller.utils.base64</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for chemdistiller.utils.base64</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="n">__base64encoderrecord</span><span class="o">=</span><span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=&#39;</span><span class="p">;</span>
+
+<span class="k">def</span> <span class="nf">__decodequad</span><span class="p">(</span><span class="n">dquad</span><span class="p">):</span>
+    <span class="c1">#print(dquad[0],dquad[1],dquad[2],dquad[3]);</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">dquad</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">dquad</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">c</span><span class="o">=</span><span class="n">dquad</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="n">d</span><span class="o">=</span><span class="n">dquad</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+    <span class="c1">#print(a,b,c,d);</span>
+    <span class="n">i</span><span class="o">=</span><span class="p">(</span><span class="n">a</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span><span class="o">|</span><span class="p">((</span><span class="n">b</span> <span class="o">&amp;</span> <span class="mb">0b00110000</span> <span class="p">)</span> <span class="o">&gt;&gt;</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">j</span><span class="o">=</span><span class="p">((</span><span class="n">b</span> <span class="o">&amp;</span> <span class="mb">0b00001111</span><span class="p">)</span> <span class="o">&lt;&lt;</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mb">0b00111100</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">k</span><span class="o">=</span><span class="p">((</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mb">0b00000011</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="mi">6</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">d</span> <span class="o">&amp;</span> <span class="mb">0b00111111</span><span class="p">));</span>
+    <span class="k">return</span> <span class="nb">bytearray</span><span class="p">([</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]);</span>
+        
+    
+    
+    
+    
+    
+
+<span class="k">def</span> <span class="nf">__convtripl</span><span class="p">(</span><span class="n">tripl</span><span class="p">):</span>
+    <span class="n">i</span><span class="o">=</span><span class="n">tripl</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">j</span><span class="o">=</span><span class="n">tripl</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">k</span><span class="o">=</span><span class="n">tripl</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="c1">#print(i,j,k);</span>
+    <span class="n">a</span><span class="o">=</span><span class="p">(</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mb">0b11111100</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">b</span><span class="o">=</span><span class="p">((</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mb">0b00000011</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">j</span> <span class="o">&amp;</span> <span class="mb">0b11110000</span><span class="p">)</span> <span class="o">&gt;&gt;</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">c</span><span class="o">=</span><span class="p">((</span><span class="n">j</span> <span class="o">&amp;</span> <span class="mb">0b00001111</span><span class="p">)</span> <span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="n">k</span> <span class="o">&amp;</span> <span class="mb">0b11000000</span><span class="p">)</span> <span class="o">&gt;&gt;</span><span class="mi">6</span><span class="p">);</span>
+    <span class="n">d</span><span class="o">=</span><span class="p">((</span><span class="n">k</span> <span class="o">&amp;</span> <span class="mb">0b00111111</span><span class="p">));</span>
+    <span class="c1">#print(a,b,c,d);</span>
+    <span class="k">return</span> <span class="n">__base64encoderrecord</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">+</span><span class="n">__base64encoderrecord</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">+</span>\
+    <span class="n">__base64encoderrecord</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">+</span><span class="n">__base64encoderrecord</span><span class="p">[</span><span class="n">d</span><span class="p">];</span>
+    
+
+    
+    
+    
+
+<div class="viewcode-block" id="encode_to_base64"><a class="viewcode-back" href="../../../chemdistiller.utils.html#chemdistiller.utils.base64.encode_to_base64">[docs]</a><span class="k">def</span> <span class="nf">encode_to_base64</span><span class="p">(</span><span class="n">btarray</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    EncodeToBase64(btarray: bytearray):string;</span>
+<span class="sd">    - Converts bytearray input into Base64 encoded string, padding as necessary;</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">bb</span><span class="o">=</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">btarray</span><span class="p">);</span>
+    <span class="n">j</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span><span class="o">//</span><span class="mi">3</span><span class="p">;</span>
+    <span class="n">k</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span><span class="p">;</span>
+    <span class="c1">#print(bb,j,k);</span>
+    <span class="n">encstring</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">):</span>
+        <span class="n">tripl</span><span class="o">=</span><span class="n">bb</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">3</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">3</span><span class="p">];</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">__convtripl</span><span class="p">(</span><span class="n">tripl</span><span class="p">);</span>
+      <span class="c1">#  print(tripl,ss);</span>
+        <span class="n">encstring</span><span class="o">=</span><span class="n">encstring</span><span class="o">+</span><span class="n">ss</span><span class="p">;</span>
+      <span class="c1">#  print(ss);</span>
+    
+    <span class="k">if</span> <span class="n">k</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">tripl</span><span class="o">=</span><span class="nb">bytearray</span><span class="p">([</span><span class="n">bb</span><span class="p">[</span><span class="n">j</span><span class="o">*</span><span class="mi">3</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]);</span>
+      <span class="c1">#  print(tripl);</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">__convtripl</span><span class="p">(</span><span class="n">tripl</span><span class="p">);</span>
+      <span class="c1">#  print(ss);</span>
+        <span class="n">encstring</span><span class="o">=</span><span class="n">encstring</span><span class="o">+</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">];</span>
+        <span class="n">encstring</span><span class="o">=</span><span class="n">encstring</span><span class="o">+</span><span class="s1">&#39;==&#39;</span><span class="p">;</span>
+      <span class="c1">#  print(encstring);</span>
+    <span class="k">elif</span> <span class="n">k</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">tripl</span><span class="o">=</span><span class="nb">bytearray</span><span class="p">([</span><span class="n">bb</span><span class="p">[</span><span class="n">j</span><span class="o">*</span><span class="mi">3</span><span class="p">],</span><span class="n">bb</span><span class="p">[</span><span class="n">j</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="n">ss</span><span class="o">=</span><span class="n">__convtripl</span><span class="p">(</span><span class="n">tripl</span><span class="p">);</span>
+      <span class="c1">#  print(ss);</span>
+        <span class="n">encstring</span><span class="o">=</span><span class="n">encstring</span><span class="o">+</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">];</span>
+        <span class="n">encstring</span><span class="o">=</span><span class="n">encstring</span><span class="o">+</span><span class="s1">&#39;=&#39;</span><span class="p">;</span>        
+    
+    
+    
+    <span class="k">return</span> <span class="n">encstring</span><span class="p">;</span></div>
+    
+
+<div class="viewcode-block" id="decode_from_base64"><a class="viewcode-back" href="../../../chemdistiller.utils.html#chemdistiller.utils.base64.decode_from_base64">[docs]</a><span class="k">def</span> <span class="nf">decode_from_base64</span><span class="p">(</span><span class="n">encstring</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    DecodeFromBase64(encstring:string):bytearray</span>
+
+<span class="sd">    Decodes Base64 encoded string into bytearray. String length must be of </span>
+<span class="sd">    multiple of 4 and it should only contain the following symbols:</span>
+<span class="sd">    </span>
+<span class="sd">    ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=</span>
+
+<span class="sd">    with &#39;=&#39; indicating the padding at the end of the string only.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">encstring</span><span class="o">=</span><span class="n">encstring</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">encstring</span><span class="p">)</span><span class="o">%</span><span class="mi">4</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;String length not divisible by 4!&#39;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">encstring</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bytearray</span><span class="p">();</span>
+    <span class="n">bb</span><span class="o">=</span><span class="nb">bytearray</span><span class="p">();</span>
+    <span class="n">q</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">encstring</span><span class="p">)</span><span class="o">//</span><span class="mi">4</span><span class="p">;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">encstring</span><span class="p">)):</span>
+            <span class="n">bb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__base64encoderrecord</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">encstring</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+    <span class="k">except</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Non-standard characters in Base64 string!&#39;</span><span class="p">);</span>
+    
+    <span class="c1">#for i in bb:</span>
+        <span class="c1">#print(i);</span>
+        
+    <span class="n">decbb</span><span class="o">=</span><span class="nb">bytearray</span><span class="p">();</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="n">dquad</span><span class="o">=</span><span class="n">bb</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">4</span><span class="p">:</span><span class="n">i</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="mi">4</span><span class="p">];</span>
+        <span class="n">qq</span><span class="o">=</span><span class="n">__decodequad</span><span class="p">(</span><span class="n">dquad</span><span class="p">);</span>
+        <span class="n">decbb</span><span class="o">=</span><span class="n">decbb</span><span class="o">+</span><span class="n">qq</span><span class="p">;</span>
+    <span class="k">if</span> <span class="n">encstring</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">encstring</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;=&#39;</span><span class="p">:</span>
+        <span class="n">decbb</span><span class="o">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="k">if</span> <span class="n">encstring</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">encstring</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;=&#39;</span><span class="p">:</span>
+        <span class="n">decbb</span><span class="o">.</span><span class="n">pop</span><span class="p">();</span>
+    
+    <span class="k">return</span> <span class="n">decbb</span><span class="p">;</span></div>
+    
+
+    
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &copy; Copyright BSD.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>
