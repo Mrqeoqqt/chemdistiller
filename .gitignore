@@ -35,7 +35,7 @@ Thumbs.db
 *.pyc
 # SVMs  and Databases#
 ######################
-DBs/*
+DBs/
 !DBs/readme.*
-SVMs/*
+SVMs/
 !SVMs/readme.*
