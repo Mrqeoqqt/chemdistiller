@@ -1,0 +1,319 @@
+charge=0
+crossvalidation_batch_index=1
+db_authors=Stravs M, Schymanski E, Singer H, Department of Environmental Chemistry, Eawag
+db_copyright=Copyright (C) 2012 Eawag, Duebendorf, Switzerland
+db_entry_id=EA010351, EA010352, EA010353, EA010354, EA010355, EA010356, EA010357, EA010358, EA010359, EA010360, EA010361, EA010362, EA010363, EA010364
+db_license=CC BY
+db_molecule_name=Acetochlor ESA 2-[(Ethoxymethyl)(2-ethyl-6-methylphenyl)amino]-2-oxoethanesulfonic acid
+db_source=MassBank
+exactmass=315.114043777
+formula=C14H21NO5S
+fpt_0=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAEAAAAADIAKIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAACAAQAAAAAAAAAAAAIAAACAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAEgAAAQAAAAAAAAAAAAEAAAAAAAAAABAAACAAYAACOAAAAAAAAAABAEAAAAAUABgAYAAAAAAAAACYAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAgAAAAAAAABAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAQAAEEEAMBIlgogA2QlV9YVdt5XP/4CkYAEcAAIAAABgCIAoDNhEAAEAAtSEoICQCCIAmGaQDEKNEUWc5EBIDgC5CRgaDhAAEAhACAcAgAEILQQBgIgAcgADQAAGwbIAxhGALGHigBENIAlAgEwgIIFIgYBIKDAIkkYIAAieLGNEgoiBBIIAEEsAAgUIAiGQhBIQEYGqhAAYCMCACABJAIA5HAAgAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAgAAADwIABAAABgRS7ANZYEGAAkFEARKpKDhhAAAQgAAERAAEIkQEEBFgSMjGEAQwQwBkZAOIQGAHAAABAAABAAAAAAIAAAIAAAAAAAAAMAAAAAAAAAAwAABAAgAAAAAAAAAAAAAAAAARAAAAAAAAABAAAIcIAQAAAAAYAgAAAIAAAAQAABAAAAAAABAAAAAAAEBgAAAAAAAABBAQAAEAAABAAAAAAIAAAAAAAAAAQAAAAAAAAAAAgAAACAAAAAAAAAACAAAAAAAAAAEAAAAEAEBAAAAAACBAACAIAAgIAAAgAAAACgAAAAAAAQAAAAAEAAJAAAAAAAAAAEAAAAIACAAAAAAAAAEAAAAAAAAAAAAAAAQAIAAAAAAAAAAAAAAABAAAAgCAAAAAAAoAAAAAAAACABEAAAAAAAAAAAAAAAAAGgCAAAAAAAACQAAAAAAAEAAAACAAAAAAAAAAABAAAAAAAAAAAAAAAAAgAAAAAAAAAAIgAAAgAAAAAAEAAAAACBACCAAAAAAAABACAIgAAAjAAUAAAIAAICIAQIAIcaAAQAAAAYAAAACgAAAAAAAAAAiACAABAAAoAgAAQACAgAAIAAAAAAAABCEAEAAAAAEENACAAAAEAAAIAAIAAIACAAAEoIoQAgIIAAEABBIAAAAFAAAEAAIAAAAAAAAAAFAIAUAgAABAABIAEAAIAAAgAAAQCCAACAAABEQIFAAoAAoAAAAESAAAIAAAAAAEQAAAAAAAGAAAABgAAAAQAgYAAAACAHAQAAAAAAAAAAAAAAA0AAAAAAEBAAAAAAgQAAAAAAAAAAAAAAIIAAIgIAAACAAAAAA=
+fptcount=1
+global_index=2290
+inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+level=1
+mode=-1
+peaks
+	1,314.10676731,100.0
+		ion_type=[M-H]-
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=35 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,119.976,29625.2
+				2,120.96,1869741.8
+				3,135.0814,14831.4
+				4,144.0816,67678.6
+				5,146.0973,119091.7
+				6,162.0923,337073.6
+				7,175.0763,6926.6
+				8,178.0178,8355.4
+				9,204.1027,22753.2
+				10,256.0646,13066.6
+				11,268.0647,11258.7
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=35 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9702,65403.1
+				2,119.976,150359.1
+				3,120.9601,4436663.7
+				4,135.0813,104421.4
+				5,144.0818,258960.3
+				6,146.0975,422002.2
+				7,162.0924,957909.8
+				8,175.0766,41624.1
+				9,178.0185,16144.4
+				10,204.1031,134066.4
+				11,256.0647,48443.2
+				12,268.0643,57150.2
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,314.1067,3587358.2
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9705,37231.2
+				2,79.9572,81293.2
+				3,120.96,180198.6
+				4,162.0926,25165.0
+				5,314.1066,2797802.3
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=45 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9701,126400.0
+				2,79.9573,749815.7
+				3,119.9758,20543.5
+				4,120.96,413308.1
+				5,135.0814,20673.1
+				6,144.0819,30107.5
+				7,146.0973,76701.1
+				8,162.0924,158758.9
+				9,314.1064,405231.6
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=60 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9702,104655.7
+				2,79.9573,796350.6
+				3,119.9766,18816.6
+				4,120.9601,138101.2
+				5,135.082,14171.4
+				6,144.0819,69006.8
+				7,146.0972,28951.0
+				8,162.0923,66855.7
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=75 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9702,85119.9
+				2,79.9573,720212.9
+				3,93.9732,15707.6
+				4,119.9765,9515.6
+				5,120.9603,41940.1
+				6,134.0981,8836.5
+				7,135.0813,9765.3
+				8,144.0817,81655.5
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=90 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9702,49599.2
+				2,79.9573,561558.9
+				3,144.0818,39724.4
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,314.1066,2542653.9
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9702,13286.0
+				2,79.9572,36625.4
+				3,120.9601,86079.4
+				4,162.0924,24265.3
+				5,314.1066,1921210.5
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=45 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9702,68431.7
+				2,79.9573,469694.2
+				3,120.9599,204255.4
+				4,135.0814,8508.5
+				5,144.0812,14855.0
+				6,146.0973,42375.5
+				7,162.0923,97300.2
+				8,314.1062,240534.8
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=60 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9701,51193.4
+				2,79.9573,560537.3
+				3,120.9601,67680.5
+				4,135.0816,9471.4
+				5,144.082,44332.8
+				6,146.0969,10121.1
+				7,162.0923,39877.5
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=75 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9701,43980.7
+				2,79.9573,447992.6
+				3,93.9728,9970.7
+				4,120.9603,16501.2
+				5,134.0978,6238.5
+				6,135.0813,6599.3
+				7,144.0817,34963.0
+				8,162.0921,5272.7
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=90 % (nominal)
+			dbsource=MassBank
+			exactmass=315.114043777
+			formula=C14H21NO5S
+			inchi=C14H21NO5S/c1-4-12-8-6-7-11(3)14(12)15(10-20-5-2)13(16)9-21(17,18)19/h6-8H,4-5,9-10H2,1-3H3,(H,17,18,19)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=314.1068
+			peaks
+				1,76.9702,14625.6
+				2,79.9573,299848.4
+				3,144.0818,10913.9
+			end
+		end
+end

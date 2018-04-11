@@ -1,0 +1,183 @@
+charge=0
+crossvalidation_batch_index=4
+db_authors=Stravs M, Schymanski E, Singer H, Department of Environmental Chemistry, Eawag
+db_copyright=Copyright (C) 2012 Eawag, Duebendorf, Switzerland
+db_entry_id=EA016101, EA016102, EA016103, EA016104, EA016105, EA016106, EA016107, EA016108, EA016109, EA016110, EA016111, EA016112, EA016113, EA016114, EA016151, EA016152, EA016153, EA016154, EA016155, EA016158, EA016159, EA016160, EA016161, EA016164
+db_license=CC BY
+db_molecule_name=Monuron 3-(4-chlorophenyl)-1,1-dimethyl-urea
+db_source=MassBank
+exactmass=198.055990662
+formula=C9H11ClN2O
+fpt_0=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAEAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJYAAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAACACABSgAAAAAQIBgAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAACAAAAAAAgAQAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAgAAAAASA4IAmQIQA4EGlX4CEYEEIAAEAAAAAAIRACAAEAAAACAAEAAAAAAgAAUKEAMAMQAUEQkAABQAAAAEBBpACAAAAAAQAAAGAIAAAAAAAQAAAAMABwJAAggABACRCAAANAAAAAAgEAIhEAQAAABAAAAAAAAAOACACAAAgAIEAAAAAAAAAAABAADBBAACgFAAQCMAACAAAAoA5kAACAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAgAAADwEIAAAABAVAiBIZ4EHgAABEABIhKABBAAAQg4AERAAEM0REEBFgycjCEAQ0SwEkZBOIAAAAAAAgAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAACAAAAAAAAAAAAAAAABAAAIcIAQAAAIAAAgAAAEAAAAAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAACAAAAAIQAAAAAAAAAAACgAAAAAAAAIAAAABAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgCAAAAAAAgAAAAAAAAAABEAAAAAAAAAAAAAAAAAEoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAIgAAAgAACAAAAAAAAAAAACCAAAAACAAAACAAAABAKAAEAAAIAAACIAQAAAIQAAAAAAAAAAgAAgAAAAAAAAgAAACABAAACIBAAAAACAgAAAAAAAAAAAACAAAQIAAAAAOACAAAAEAAAIAAAAAAAAAAAAgIAIAgIIgAAAABIAEAKBgAAAAAIAAAAAAAAAABAIABAAAAAAAAAAAAAAAAAgCAAQACAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAgAAAAQAgAAAAAAACAEAAAAAAAAAAAAAAA4AAAAAAEAAAAAAAAQAAAAAAAAAAAAAAAQAEAgIAAAAAAAAAA=
+fptcount=1
+global_index=2334
+inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+level=1
+mode=-1
+peaks
+	1,197.048714195,100.0
+		ion_type=[M-H]-
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=35 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,151.9907,74038.9
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=35 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,151.9908,199847.3
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,197.0487,39450.2
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,151.9906,5430.2
+				2,197.0487,32151.2
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=45 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,151.9906,11005.7
+				2,197.0488,10780.7
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=60 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,151.9905,5200.9
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,197.0485,23600.9
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,197.0483,16969.5
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=45 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,151.9906,5535.6
+				2,197.0487,4321.0
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=60 % (nominal)
+			dbsource=MassBank
+			exactmass=198.055990662
+			formula=C9H11ClN2O
+			inchi=C9H11ClN2O/c1-12(2)9(13)11-8-5-3-7(10)4-6-8/h3-6H,1-2H3,(H,11,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=197.0487
+			peaks
+				1,151.9907,3082.0
+			end
+		end
+end

@@ -1,0 +1,199 @@
+charge=0
+crossvalidation_batch_index=1
+db_authors=Stravs M, Schymanski E, Singer H, Department of Environmental Chemistry, Eawag
+db_copyright=Copyright (C) 2012 Eawag, Duebendorf, Switzerland
+db_entry_id=EA271351, EA271352, EA271353, EA271357, EA271358, EA271359, EA271360
+db_license=CC BY
+db_molecule_name=Perfluorobutyric acid Heptafluorobutyric acid 2,2,3,3,4,4,4-heptafluorobutanoic acid
+db_source=MassBank
+exactmass=213.986476812
+formula=C4HF7O2
+fpt_0=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAACAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEABAACAAAQiAAAAACBAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAABAAAYAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAABAAAAAAAAAEAABAAAAAAAAAAGEAIAQgAEoQAASAAZAAAAAAAAAAAAAAAAMAAQAAAAAAAAGAAAAACAAAAAAAAAAAAAAAAAAAgAABAAAAAgAAAAAAAIAAAAAASAAADAAAAAwAAAAACAAAAAAAABCAAgAAoQAAAAAAAQAAAACAAACAAcEAAADAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACAAAAAAAAAAwGOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYAABAAABAAAQAgABAAAAQAEAABIBAAAAAAAAAAAAACAAAAAAAgAAAAAIAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYcJAAAAAAgQAAEAAAAAAAAAAAAAAAAAAAAAAAIgAAAgAAAAAAACBBAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAABAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAgAAAAAAAAAAAAAAAIAAAgAAiAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAUAIAAAAAAAAAISAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAGAAAAAAAAAMAAAAAAkAAAAAAAAAAAAAAAAAAAAAAAIAAIAABAAAAAAAAAAAAAAAAAACIAAwFAAAAAABAAAQAAAAAAAAAAAAAAQAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAABBgAAAAAAAAAAAAACBAAAAAAAAAIAAAAAAwAABgAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAA=
+fptcount=1
+global_index=2523
+inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+level=1
+mode=-1
+peaks
+	1,212.979200345,100.0
+		ion_type=[M-H]-
+		spectrum
+			charge=0
+			collision_energy=80.0
+			collision_record=80
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9894,139648.8
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=35 % (nominal)
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9896,5455672.8
+				2,212.9789,100888.1
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9896,580671.9
+				2,212.9791,62002.4
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9897,311991.4
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=90 % (nominal)
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9897,6984.3
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9893,169397.7
+				2,212.9784,14484.4
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9893,139684.9
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=45 % (nominal)
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9892,20491.9
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=35.0
+			collision_record=35
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9897,6841.1
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=55.0
+			collision_record=55
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9893,5898.2
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=50.0
+			collision_record=50
+			dbsource=MassBank
+			exactmass=213.986476812
+			formula=C4HF7O2
+			inchi=C4HF7O2/c5-2(6,1(12)13)3(7,8)4(9,10)11/h(H,12,13)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=212.9792
+			peaks
+				1,168.9894,184372.0
+			end
+		end
+end

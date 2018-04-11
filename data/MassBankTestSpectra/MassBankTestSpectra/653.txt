@@ -1,0 +1,260 @@
+charge=0
+crossvalidation_batch_index=1
+db_authors=Stravs M, Schymanski E, Singer H, Department of Environmental Chemistry, Eawag
+db_copyright=Copyright (C) 2012 Eawag, Duebendorf, Switzerland
+db_entry_id=EA080451, EA080452, EA080453, EA080454, EA080455, EA080456, EA080457, EA080458, EA080459, EA080460, EA080461, EA080462, EA080463, EA080464
+db_license=CC BY
+db_molecule_name=3,5-Dibromo-4-hydroxybenzoic acid 3,5-bis(bromanyl)-4-oxidanyl-benzoic acid
+db_source=MassBank
+exactmass=293.852717988
+formula=C7H4Br2O3
+fpt_0=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAaCAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhAgAAAAAAAJAAAgAAAAAAgAAAAAAABgAAAAAAAAAAEAAAEAAAAAAIAACCAIiQjRUp4AEYAAYAAAAAQAAAAAABAAAAAAAAhAEAAAAAAAAACiBAAAIgAkFIEAAE4AAAAgQgABAAACAAAAAAIAIgBAAAggAAAAADAAAAAoIAgAAAAAAAAAJAAAAAAoAAEAAAAAAAAAAIAAIgAIsAAAAAAAAAACAAAAAAAAAAQAAEAAAAAEAAEAACACAAAAAAAAwGAAADAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAgAAADQAgBAAA1gJATAAYB0AAAQBEARBpBAABAAASEAIARACCBHQEExlBColAOIASYAiETcvEdhJnEAAACAAQAgAgAAAQACAEAAAAAAAAAAAAAAAAAAAAAARAAAAAAAAgAAAAIgAAAAAAAAAAAAAAABAAgIcIAAAAAAgQAACAAAAAAAQAAAAAAAAAAABAAAAAAAEgAAAAAAAABAAQAAAAAAAAAAAAAAAAABAAAAAACAAAAAAAAAAAgAAAAAAAAAABAAAAAAAAAAAAAACAAAAAAAAAAAAAACABAAAIAAAIAAAgAAAACAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAgAAAAAAAAAABAAAAAAAAAAAAAAAgAAAABAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAACAAUAIAAAAIDIAAFQAAQAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAIAAAAAAAAAAAAAAOAAUAAAAFAAAAAAAAAAAAAAAAAAKIAAIAAAAABAAAAAAAAAAAAAAAAAAAAAQAFAIAAAIAAAAABAAAAAAAAAgAAAUACAACAAAAUgIAAAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAQIAAAACAAACAAAAAAAAAAAQAgAAA6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAQAAAAEAAAAAAAA=
+fptcount=1
+global_index=2478
+inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+level=1
+mode=-1
+peaks
+	1,292.845441521,100.0
+		ion_type=[M-H]-
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=35 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,248.8553,1551474.2
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=35 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,248.8555,2639727.3
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,248.8558,4708.4
+				2,292.8451,278107.2
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9189,12941.7
+				2,248.8555,100614.1
+				3,292.8452,163325.4
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=45 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9187,65446.4
+				2,248.8552,104354.8
+				3,292.845,24113.6
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=60 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9189,93267.9
+				2,248.8557,30596.8
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=75 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9188,73776.1
+				2,248.8562,3840.6
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=90 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9188,60663.3
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=15 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,248.8565,2729.0
+				2,292.845,167996.7
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=30 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9188,8644.5
+				2,248.8552,52459.2
+				3,292.845,84771.0
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=45 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9188,30609.4
+				2,189.8264,1439.0
+				3,248.8554,71147.7
+				4,292.8449,14614.9
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=60 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9188,53024.6
+				2,248.8554,22344.4
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=75 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9188,45710.3
+				2,189.8272,2118.7
+				3,248.8552,3748.5
+			end
+		end
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=90 % (nominal)
+			dbsource=MassBank
+			exactmass=293.852717988
+			formula=C7H4Br2O3
+			inchi=C7H4Br2O3/c8-4-1-3(7(11)12)2-5(9)6(4)10/h1-2,10H,(H,11,12)
+			level=2
+			mode=-1
+			precursor_ion=[M-H]-
+			precursor_mz=292.8454
+			peaks
+				1,78.9189,20737.4
+			end
+		end
+end
