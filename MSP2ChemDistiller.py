@@ -13,7 +13,6 @@ author: Mingyi Xue
 
 import io
 import sys
-import 
 
 
 def import_spectra_from_msp():

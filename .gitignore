@@ -39,3 +39,6 @@ DBs/
 !DBs/readme.*
 SVMs/
 !SVMs/readme.*
+#        IDE         #
+######################
+.idea/
