@@ -41,7 +41,19 @@ class SpectralManager:
             spectrum.parameters['filename']=n;
             spectrum.load_from_textfile(fname);
             self.ms_spectra.append(spectrum);
-            
+
+
+    def add_spectrum_from_mgffile(self, fname):
+        # load spectrum data from mgf files
+        # author : Mingyi
+        # haven't been tested
+        # when this program occurs error ,
+        # remember to delete all code written by Mingyi
+        # and roll back to the original one
+        from chemdistiller.io.mgf import import_mgf
+        import_mgf(fname, self)
+
+
     def import_textfile_spectra_from_folder(self, dirname):
         print('Importing from %s'%dirname);
         print('\n');
@@ -51,6 +63,18 @@ class SpectralManager:
             if fileext.lower()=='.txt':
                 self.add_spectrum_from_textfile(os.path.join(dirname,fname));
                 print_in_the_same_line('\r%s spectra loaded'%len(self.ms_spectra));
+            elif fileext.lower()=='.mgf':
+                # if file extension name is '.mgf'
+                # this branch helps deal with folders that include mgf files
+                # and files of mixed types
+
+                # author : Mingyi
+                # haven't been tested
+                # when this program occurs error ,
+                # remember to delete all code written by Mingyi
+                # and roll back to the original one
+                self.add_spectrum_from_mgffile(os.path.join(dirname,fname))
+                print_in_the_same_line('\r%s spectra loaded' % len(self.ms_spectra))
         print('\n');        
                 
     def export_textfile_spectra_to_folder(self, dirname):

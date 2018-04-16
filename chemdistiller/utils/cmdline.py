@@ -444,7 +444,7 @@ class Value:
         
 #-------------------------------------------                
     
-class OptionsHolder:
+class   OptionsHolder:
 
 
     def _resolve_path(self, path):

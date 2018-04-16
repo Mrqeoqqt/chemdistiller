@@ -52,7 +52,8 @@ class MSSpectrum:
                 self._pipe_from_textfile(finp);
         else:
             raise IOError('File %s not found!'%fname);
-            
+
+
     def _pipe_from_textfile(self, finp):
         current_peak=None;
         current_peak_number=0;

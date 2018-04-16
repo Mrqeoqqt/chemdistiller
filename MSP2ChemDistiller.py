@@ -13,6 +13,9 @@ author: Mingyi Xue
 
 import io
 import sys
+import pandas as pd
+import numpy as np
+import scipy as sp
 
 
 def import_spectra_from_msp():
