@@ -94,5 +94,5 @@ if __name__=='__main__':
     if len(sys.argv)==3:
         mgf_parser = MGFParser(sys.argv[1],sys.argv[2])
     #mgf_parser = MGFParser(sys.argv[1])
-    mgf_parser=MGFParser(r'C:\Users\薛明怡\Desktop\chemdistiller_wk\diff_types_file_CD')
-    output_folder=mgf_parser.mgf2cd()
+    #mgf_parser=MGFParser(r'<filepath>')
+    #output_folder=mgf_parser.mgf2cd()
