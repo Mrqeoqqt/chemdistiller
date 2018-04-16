@@ -65,7 +65,6 @@ class CD:
         # from cd_files to mgf
         # a reverse process of chemdistiller.msspectra.spectrum._pipe_from_textfile
         params=mgf.get_para()
-
         for (k,v) in params.items():
             if k=='peaks':
                 self.parameters['peaks']=v

@@ -13,7 +13,7 @@ CD_DEFAULT_PARAMS={
                 'global_index': '',
                 'inchi': '',
                 'level': '',
-                'mode': '',
+                'mode': '1',
                 'collision_energy': '',
                 'peaks': []
                 }
