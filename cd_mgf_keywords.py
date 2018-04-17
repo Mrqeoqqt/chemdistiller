@@ -12,27 +12,30 @@ CD_DEFAULT_PARAMS={
                 'fptcount': '',
                 'global_index': '',
                 'inchi': '',
-                'level': '',
+                'level': '1',
                 'mode': '1',
-                'collision_energy': '',
-                'peaks': []
+                'peaks': [],
+                'charge': '',
+                'ion_type': ''
                 }
 # level: int, mode: int, collision_energy: float
 # these parameters will be loaded by chemdistiller.msspectra.spectrum as specific types
+#'mode': '',
+#'collision_energy': '',
 
 CD_DEFAULT_SUB_PARAMS={
-                    'ion_type': '',
                     'charge': '',
-                    'collision_energy': '',
+                    'collision_energy': '-1.0',
                     'collision_record': '',
                     'dbsource': '',
                     'exactmass': '',
                     'formula': '',
                     'inchi': '',
-                    'level': 2,
+                    'level': '2',
                     'mode': '',                 # compulsory parameter for level 1
                     'precursor_ion': '',
-                    'precursor_mz': ''
+                    'precursor_mz': '',
+                    'peaks':[]
 }
 # this chunk begins with 'spectrum' and ends with 'end'
 # sub peaks begins with 'peaks' and end with 'end'
@@ -40,6 +43,6 @@ CD_DEFAULT_SUB_PARAMS={
 
 MAP_OF_MGF_CD={
                 'PEPMASS': 'exactmass',
-                'MSLEVEL': 'level'
+                'MSLEVEL': 'level',
 }
 #this is a map of keywords

@@ -14,7 +14,6 @@ import sys
 from chemdistiller.io.cdinput import CD
 from chemdistiller.io.mgfinput import MGFfile
 
-
 #import pandas
 #import re
 
@@ -71,7 +70,35 @@ class MGFParser:
         MGF = MGFfile(file)
         mgfs = MGF.get_mgfs()
         for mgf in mgfs:
-            cd=CD()
+            CD_DEFAULT_PARAMS = {
+                'db_molecule_name': '',
+                'exactmass': '',
+                'formula': '',
+                'fpt_0': '',
+                'fptcount': '',
+                'global_index': '',
+                'inchi': '',
+                'level': '1',
+                'mode': '1',
+                'peaks': [],
+                'charge': '',
+                'ion_type': ''
+            }
+            CD_DEFAULT_SUB_PARAMS = {
+                'charge': '',
+                'collision_energy': '-1.0',
+                'collision_record': '',
+                'dbsource': '',
+                'exactmass': '',
+                'formula': '',
+                'inchi': '',
+                'level': '2',
+                'mode': '',  # compulsory parameter for level 1
+                'precursor_ion': '',
+                'precursor_mz': '',
+                'peaks': []
+            }
+            cd=CD(CD_DEFAULT_PARAMS,CD_DEFAULT_SUB_PARAMS)
             cd.gen_from_mgf(mgf)
             n,e = os.path.splitext(os.path.basename(file))
             tmp_file = os.path.join(self.tmp_fname, n+'.txt')
@@ -88,11 +115,14 @@ class MGFParser:
 
 if __name__=='__main__':
     # a simple test for this module
-    #if len(sys.argv)==1:
-        #print("please type in input files or folder")
-        #quit()
-    if len(sys.argv)==3:
-        mgf_parser = MGFParser(sys.argv[1],sys.argv[2])
+    if len(sys.argv)==1:
+        print("please type in input files or folder")
+        quit()
+    elif len(sys.argv)==2:
+        mgf_parser = MGFParser(sys.argv[1])
+    elif len(sys.argv)==3:
+        mgf_parser = MGFParser(sys.argv[1], sys.argv[2])
+
     #mgf_parser = MGFParser(sys.argv[1])
-    #mgf_parser=MGFParser(r'<filepath>')
+    #mgf_parser=MGFParser(r'<input_folder>')
     #output_folder=mgf_parser.mgf2cd()
