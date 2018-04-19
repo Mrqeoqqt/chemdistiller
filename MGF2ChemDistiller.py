@@ -87,7 +87,7 @@ class MGFParser:
             }
             CD_DEFAULT_SUB_PARAMS = {
                 'charge': '',
-                'collision_energy': '',
+                'collision_energy': '-1.0',
                 'collision_record': '',
                 'dbsource': '',
                 'exactmass': '',
