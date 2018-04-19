@@ -10,7 +10,6 @@ import os
 import sys
 from cd_mgf_keywords import CD_DEFAULT_SUB_PARAMS
 from cd_mgf_keywords import CD_DEFAULT_PARAMS
-from cd_mgf_keywords import MAP_OF_MGF_CD
 
 
 
@@ -24,13 +23,15 @@ if __name__=='__main__':
 
 
 class CD:
+    """
+    This class is a structure for chemdistiller input.
+    Receive parameters to document or generate a chemdistiller input from a MGF file.
+    """
     def __init__(self,params=CD_DEFAULT_PARAMS,sub_params=CD_DEFAULT_SUB_PARAMS):
         self.parameters = params
         self.sub_parameters=sub_params
 
     def get_params(self):
-        #if len(self.parameters)==0:
-        #    self.make_pairs()
         return self.parameters
 
     def write_cd(self,file):
@@ -40,7 +41,8 @@ class CD:
             for (k,v) in self.parameters.items():
                 if k=='db_molecule_name':
                     # if molecule already has a name, use it
-                    # else assign a name for it for .html report generation
+                    # else assign the file name for it
+                    # name will be used in .html report generation
                     f.write(k + '=')
                     if v=='':
                         n,e=os.path.splitext(os.path.basename(file))
@@ -54,7 +56,7 @@ class CD:
                     continue
                 f.write(k+'='+v+'\n')
             f.write('peaks'+'\n')
-            f.write('\t1,'+self.parameters['peaks'][0]+',100.0'+'\n')
+            f.write('\t1,'+self.parameters['peaks']+',100.0'+'\n')
             f.write('\tion_type='+self.parameters['ion_type']+'\n')
 
             f.write('\t\tspectrum\n')
@@ -84,71 +86,61 @@ class CD:
         params=mgf.get_para()
         for (k,v) in params.items():
             if k=='peaks':
+                self.sub_parameters['peaks']=v
+            elif k=='PEPMASS':
+                # set precursor and precursor_mz
                 self.parameters['peaks']=v
-            elif k in MAP_OF_MGF_CD.keys():
-                self.parameters[MAP_OF_MGF_CD[k]] = v
+                self.sub_parameters['precursor_mz']=v
             else:
                 self.parameters[str.lower(k)] = v
-        # check 'level' and create a sub spectrum
-        peaks=self.parameters['peaks']
-        if int(self.parameters['level'])==2:
+
+        if int(self.parameters['level'])!=1:
+            # check 'level'
             # set level always to 1
             self.parameters['level']='1'
 
-        # find the largiest m/z and set as precursor
-        if float(self.parameters['peaks'][0].split()[0]) > float(self.parameters['peaks'][-1].split()[0]):
-            main_peak = self.parameters['peaks'][0].split()
+        peaks = self.sub_parameters['peaks']
+
+
+        p1=peaks[0].split()
+        p2=peaks[-1].split()
+        if float(p1[0]) > float(p2[0]):
+            main_peak=p1
         else:
-            main_peak = self.parameters['peaks'][-1].split()
+            main_peak = p2
+        # find the largest m/z peak
 
+        if self.parameters['peaks']=='':
+            # if PEPMASS not exist,
+            # then find the largiest m/z and set as precursor
+            self.parameters['peaks'] = main_peak[0]
+            self.sub_parameters['precursor_mz'] = main_peak[0]
 
-        self.sub_parameters['peaks']=peaks
+        if self.parameters['ion_type']=='':
+            if len(main_peak) == 3:
+                self.parameters['ion_type']=main_peak[2]
+                self.sub_parameters['precursor_ion']=main_peak[2]
+                if '-' in self.parameters['peaks'][2]:
+                    self.parameters['mode'] = '-1'
+                    self.sub_parameters['mode'] = '-1'
+                else:
+                    self.parameters['mode'] = '1'
+                    self.sub_parameters['mode'] = '1'
+            else:
+                self.parameters['ion_type'] = r'[M+H]+'
+                self.sub_parameters['precursor_ion'] = r'[M+H]+'
+                self.parameters['mode'] = '1'
+                self.sub_parameters['mode'] = '1'
+
         self.sub_parameters['charge']=self.parameters['charge']
         self.sub_parameters['exactmass']=self.parameters['exactmass']
         self.sub_parameters['formula']=self.sub_parameters['formula']
         self.sub_parameters['inchi'] = self.sub_parameters['inchi']
-        self.parameters['peaks']=main_peak
-
-        if len(main_peak) >= 1:
-            # main peak
-            self.sub_parameters['precursor_mz']=main_peak[0]
-        if len(self.parameters['peaks']) == 3:
-            self.parameters['ion_type']=main_peak[2]
-            self.sub_parameters['precursor_ion']=main_peak[2]
-            if '-' in self.parameters['peaks'][2]:
-                self.parameters['mode'] = '-1'
-                self.sub_parameters['mode'] = '-1'
-            else:
-                self.parameters['mode'] = '1'
-                self.sub_parameters['mode'] = '1'
-        else:
-            self.parameters['ion_type'] = r'[M+H]+'
-            self.sub_parameters['precursor_ion'] = r'[M+H]+'
-            self.parameters['mode'] = '1'
-            self.sub_parameters['mode'] = '1'
 
 
 
 
 
-
-
-
-
-
-if __name__=='__main__':
-    params = {'db_molecule_name': '',
-                      'exactmass': '',
-                      'formula': '',
-                      'fpt_0': '',
-                      'fptcount': '',
-                      'global_index': '',
-                      'inchi': '',
-                      'level': '',
-                      'mode': '',
-                      'collision_energy': '',
-                      'peaks': []
-                      }
 
 
 

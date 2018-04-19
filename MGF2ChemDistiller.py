@@ -5,8 +5,8 @@ Created on Thur April 12 2018
 
 Users can run this module directly to convert '.mgf' files to chemdistiller input files,
 or invoke this module in the whole program.
-Usage in command line: python MGF2ChemDistiller <input_file> (<output_folder>)
-                       python MGF2ChemDistiller <input_folder> (<output_folder>)
+Usage in command line: python MGF2ChemDistiller.py <input_file> (<output_folder>)
+                       python MGF2ChemDistiller.py <input_folder> (<output_folder>)
 """
 
 import os
@@ -34,7 +34,8 @@ class MGFParser:
     def __init__(self, fname, output_folder=''):
         print("Trying to convert MGF files to chemdistiller inputs...")
         self.fname=[]
-        self.tmp_fname = ''  # chemdistiller input path
+        self.tmp_fname = ''
+        # chemdistiller input path
         if os.path.isdir(fname):
             for f in os.listdir(fname):
                 self.fname.append(os.path.join(fname,f))
@@ -67,6 +68,7 @@ class MGFParser:
         return self.cds
 
     def proc_single_file(self, file):
+        # create empty chemditiller structure
         MGF = MGFfile(file)
         mgfs = MGF.get_mgfs()
         for mgf in mgfs:
@@ -79,27 +81,29 @@ class MGFParser:
                 'global_index': '',
                 'inchi': '',
                 'level': '1',
-                'mode': '1',
-                'peaks': [],
+                'mode': '',
+                'peaks': '',
                 'charge': '',
                 'ion_type': ''
             }
             CD_DEFAULT_SUB_PARAMS = {
                 'charge': '',
-                'collision_energy': '-1.0',
+                'collision_energy': '',
                 'collision_record': '',
                 'dbsource': '',
                 'exactmass': '',
                 'formula': '',
                 'inchi': '',
                 'level': '2',
-                'mode': '',  # compulsory parameter for level 1
+                'mode': '',
+                # compulsory parameter for level 1
                 'precursor_ion': '',
                 'precursor_mz': '',
-                'peaks': []
+                'peaks': ''
             }
             cd=CD(CD_DEFAULT_PARAMS,CD_DEFAULT_SUB_PARAMS)
             cd.gen_from_mgf(mgf)
+            # convert mgf parameters to chemdistiller parameters
             n,e = os.path.splitext(os.path.basename(file))
             tmp_file = os.path.join(self.tmp_fname, n+'.txt')
             if os.path.exists(tmp_file)==False:
@@ -108,21 +112,26 @@ class MGFParser:
                 while os.path.exists(tmp_file):
                     self.count += 1
                     tmp_file = os.path.join(self.tmp_fname, n+'_'+str(self.count)+'.txt')
-            # write parameters of cd to files
             cd.write_cd(tmp_file)
+            # write parameters of cd to files
             self.cds.append(tmp_file)
 
 
 if __name__=='__main__':
     # a simple test for this module
     if len(sys.argv)==1:
-        print("please type in input files or folder")
+        print("python MGF2ChemDistiller.py <input_file> (<output_folder>)")
         quit()
     elif len(sys.argv)==2:
         mgf_parser = MGFParser(sys.argv[1])
+        mgf_parser.mgf2cd()
+        print("input folder:" + sys.argv[1])
     elif len(sys.argv)==3:
         mgf_parser = MGFParser(sys.argv[1], sys.argv[2])
+        mgf_parser.mgf2cd()
+    else:
+        print("parameter error...\n")
+        print("python MGF2ChemDistiller.py <input_file> (<output_folder>)")
+        quit()
 
-    #mgf_parser = MGFParser(sys.argv[1])
-    #mgf_parser=MGFParser(r'<input_folder>')
-    #output_folder=mgf_parser.mgf2cd()
+

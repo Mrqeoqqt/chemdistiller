@@ -13,8 +13,8 @@ CD_DEFAULT_PARAMS={
                 'global_index': '',
                 'inchi': '',
                 'level': '1',
-                'mode': '1',
-                'peaks': [],
+                'mode': '',
+                'peaks': '',
                 'charge': '',
                 'ion_type': ''
                 }
@@ -25,7 +25,7 @@ CD_DEFAULT_PARAMS={
 
 CD_DEFAULT_SUB_PARAMS={
                     'charge': '',
-                    'collision_energy': '-1.0',
+                    'collision_energy': '',
                     'collision_record': '',
                     'dbsource': '',
                     'exactmass': '',
@@ -35,14 +35,9 @@ CD_DEFAULT_SUB_PARAMS={
                     'mode': '',                 # compulsory parameter for level 1
                     'precursor_ion': '',
                     'precursor_mz': '',
-                    'peaks':[]
+                    'peaks':''
 }
 # this chunk begins with 'spectrum' and ends with 'end'
 # sub peaks begins with 'peaks' and end with 'end'
 
-
-MAP_OF_MGF_CD={
-                'PEPMASS': 'exactmass',
-                'MSLEVEL': 'level',
-}
 #this is a map of keywords
