@@ -15,8 +15,8 @@ def import_mgf(fname, spectral_manager, parameters=None):
     # when this program occurs error ,
     # remember to delete all code written by Mingyi
     # and roll back to the original one
-    parser = MGFParser()
-    fname = parser.mgf2cd(fname)#convert mgf to cd chemdistiller input
+    parser = MGFParser(fname)
+    fname = parser.mgf2cd()#convert mgf to cd chemdistiller input
     for file in fname:
         spectrum = MSSpectrum();
         n, e = os.path.splitext(os.path.basename(fname));
