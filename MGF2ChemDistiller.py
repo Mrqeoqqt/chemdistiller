@@ -3,8 +3,7 @@
 Created on Thur April 12 2018
 @author: Mingyi Xue
 
-Users can run this module directly to convert '.mgf' files to chemdistiller input files,
-or invoke this module in the whole program.
+Users can run this module directly to convert '.mgf' files to chemdistiller input files.
 Usage in command line: python MGF2ChemDistiller.py <input_file> (<output_folder>)
                        python MGF2ChemDistiller.py <input_folder> (<output_folder>)
 """
