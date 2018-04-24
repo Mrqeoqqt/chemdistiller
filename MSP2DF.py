@@ -3,7 +3,7 @@
 Created on Fri Apr 20 06:09:16 2018
 This module aims at read MSP files to a pandas DataFrame,
 and write the DataFrame back to MSP files.
-@author: 薛明怡
+@author:  Mingyi Xue
 """
 
 import pandas as pd
