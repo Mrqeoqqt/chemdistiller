@@ -9,3 +9,5 @@ MGF2ChemDistiller.py module will create a single file for each spectra.
 
 The default output folder is a created dirctory named 'default' under the same directory as the input folder or file, and 
 new created files have the same name as its parent mgf files.
+
+Professor Fiehn’s laboratory owns datasets under this directory.

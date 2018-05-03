@@ -9,3 +9,5 @@ MSP2ChemDistiller.py module will create a single file for each spectra.
 
 The default output folder is a created dirctory named 'default' under the same directory as the input folder or file, and 
 new created files are named after its molecular name or its filename if molecular name is null.
+
+Professor Fiehn’s laboratory owns datasets under this directory.
