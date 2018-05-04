@@ -98,13 +98,13 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
                             if pd.isnull(df.loc[index, 'InChIKey']):
                                 f.write(s[0] + '=\n')
                             else:
-                                f.write(s[0] + '=' + str(df.loc[index, 'InChIKey']) + '\n')
+                                f.write(s[0] + '=' + str(df.loc[index, 'InChIKey']).strip() + '\n')
                         elif head == 'precursor_ion':
-                                f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORTYPE']) + '\n')
+                                f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORTYPE']).strip() + '\n')
                         elif head == 'precursor_mz':
                             f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORMZ']).strip() + '\n')
                         elif head == 'ion_type':
-                            f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORTYPE']) + '\n')
+                            f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORTYPE']).strip() + '\n')
                     else:
                         # '[' in line and start with numbers
                         # means this line is a peak
