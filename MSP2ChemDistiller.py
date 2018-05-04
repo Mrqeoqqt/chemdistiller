@@ -73,7 +73,7 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
         for index in df.index:
             # each row in df represents a molecule
             # write every row to a single chemdistiller input file
-            name = df.loc[index, 'NAME']
+            name = df.loc[index, 'NAME'].split(';')[0]
             # use 'NAME' of molecule as chemdistiller input filename
             output_file = os.path.join(output_folder, name+'.txt')
             print_in_the_same_line("processing "+name+" to a chemdistiller input file")
@@ -102,7 +102,7 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
                         elif head == 'precursor_ion':
                                 f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORTYPE']) + '\n')
                         elif head == 'precursor_mz':
-                            f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORMZ']) + '\n')
+                            f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORMZ']).strip() + '\n')
                         elif head == 'ion_type':
                             f.write(s[0] + '=' + str(df.loc[index, 'PRECURSORTYPE']) + '\n')
                     else:
