@@ -62,7 +62,7 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
     # save contents in 0_empty.txt
     with open(sample_file, 'r') as f:
         sample = [line for line in f]
-        print("Template loaded.")
+        print("Template loaded from " + sample_file)
     # copy sample file to memory, save io time
 
     for file in files:
@@ -76,7 +76,7 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
             name = df.loc[index, 'NAME'].split(';')[0]
             # use 'NAME' of molecule as chemdistiller input filename
             output_file = os.path.join(output_folder, name+'.txt')
-            print_in_the_same_line("processing "+name+" to a chemdistiller input file")
+            print_in_the_same_line("processing "+name)
             with open(output_file, 'w') as f:
                 notation = 0
                 # notation for peak information
@@ -120,14 +120,14 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
                             notation = -1
                             indice = 0
                             peaks = str(df.loc[index, 'peaks'])
-                            peaks = peaks.split('#')
+                            peaks = peaks.split('*')
                             for peak in peaks:
                                 if len(peak) != 0:
                                     indice += 1
                                     p = peak.split()
                                     if len(p) >= 2:
-                                        f.write('\t\t\t\t' + str(indice) + ',' + str(p[0]).strip() +
-                                                ',' + str(p[1]).strip() + '\n')
+                                        f.write('\t\t\t\t' + str(indice) + ',' + str(p[0].strip()) +
+                                                ',' + str(p[1].strip()) + '\n')
     print("Completed.")
 
 

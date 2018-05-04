@@ -50,9 +50,9 @@ def read_from_file(filename):
                     df.loc[i, 'peaks'] = ''
                     i = -i
                     # a notation to recognize if df.loc[i, 'peaks'] is empty
-                df.loc[-i, 'peaks'] = str(df.loc[-i, 'peaks']) + str(line) + '#'
+                df.loc[-i, 'peaks'] = str(df.loc[-i, 'peaks']) + str(line) + '*'
 
-                # peaks info, seperated by '#'
+                # peaks info, seperated by '*'
         print_in_the_same_line("loaded data from %s." % filename)
     return df
 
@@ -85,7 +85,7 @@ def write_to_file(df, filename):
                 else:
                     continue
             peaks = str(df.loc[index, 'peaks'])
-            peaks = peaks.split('#')
+            peaks = peaks.split('*')
             for peak in peaks:
                 if len(peak) != 0:
                     f.write(str(peak) + '\n')
