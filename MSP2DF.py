@@ -12,7 +12,7 @@ import os
 import sys
 import datetime
 import re
-
+from chemdistiller.utils.sysutils import print_in_the_same_line
 
 def read_from_file(filename):
     """
@@ -24,7 +24,7 @@ def read_from_file(filename):
     df = pd.DataFrame(data=[], index=[], columns=[])
     with open(filename, 'r') as f:
         i = 0
-        print("processing file %s to dataframe" % filename)
+        print_in_the_same_line("processing file %s to dataframe" % filename)
         # initialize a dataframe and insert a column named 'peaks'
         for line in f:
             line = str(line.lstrip().rstrip())
@@ -53,7 +53,7 @@ def read_from_file(filename):
                 df.loc[-i, 'peaks'] = str(df.loc[-i, 'peaks']) + str(line) + '#'
 
                 # peaks info, seperated by '#'
-    print("loaded data from %s." % filename)
+        print_in_the_same_line("loaded data from %s." % filename)
     return df
 
 
@@ -65,18 +65,20 @@ def write_to_file(df, filename):
     :return: None
     """
     with open(filename, 'w') as f:
-        print("writing dataframe to %s" % filename)
+        print_in_the_same_line("writing dataframe to %s" % filename)
         # for (k, v) in df.iteritems():
         #     if k == 'peaks':
         #         continue
         #     else:
         #         f.write("%s: %s\r\n" % (k, v))
         columns = df.columns.tolist()
+        # get column name of a dateframe
         for index in df.index:
             for column in columns:
                 if column != 'peaks':
                     s = df.loc[index, column]
                     if (s != '') & (pd.isnull(s) == False):
+                        # if character is null, do not write it to files
                         f.write(column+':' + str(s) + '\n')
                     else:
                         continue
@@ -89,12 +91,12 @@ def write_to_file(df, filename):
                     f.write(str(peak) + '\n')
             f.write('\n')
 
-        print("loaded data to %s" % filename)
+        print_in_the_same_line("loaded data to %s" % filename)
     return
 
 def MSP_run(input,output_folder=''):
     """
-
+    test read_from_file and write_to_file in this module
     :param input: an input MSP file or folder
     :param output_folder: an output folder,
     default in the same directory as the input file,

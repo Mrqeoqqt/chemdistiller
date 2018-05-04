@@ -1,0 +1,30 @@
+db_molecule_name=[inchikey]
+exactmass=
+formula=
+fpt_0=
+fptcount=
+global_index=
+inchi=
+level=1
+mode=1
+peaks
+	1,[precursor_mz],100.0
+		ion_type=[precursor_type]
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=
+			dbsource=
+			exactmass=
+			formula=
+			inchi=
+			level=2
+			mode=1
+			precursor_ion=[precursor_type]
+			precursor_mz=[precursor_mz]
+			peaks
+				1,[m/z],[abundance]
+				2,[m/z],[abundance]
+			end
+		end
+end

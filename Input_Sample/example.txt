@@ -1,0 +1,39 @@
+db_molecule_name=ILGMGHZPXRDCCS-UHFFFAOYSA-N
+exactmass=
+formula=
+fpt_0=
+fptcount=
+global_index=
+inchi=
+level=1
+mode=1
+peaks
+	1,192.0655,100.0
+		ion_type=[M+H]+
+		spectrum
+			charge=0
+			collision_energy=-1.0
+			collision_record=
+			dbsource=
+			exactmass=
+			formula=
+			inchi=
+			level=2
+			mode=1
+			precursor_ion=[M+H]+
+			precursor_mz=192.0655
+			peaks
+				1,64.73101,5829
+				2,69.77278,5834
+				3,128.04906,8734
+				4,132.04459,44349
+				5,146.06012,4425094
+				6,146.54581,8108
+				7,174.05513,382609
+				8,192.06522,51965
+				9,192.08444,7212
+				10,192.10265,97868
+				11,192.13846,79121
+			end
+		end
+end
