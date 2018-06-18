@@ -46,6 +46,7 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
 
     if len(output_folder) == 0:
         # using default output directory
+        print('Using default output directory...')
         output_folder = os.path.join(input_folder, 'output')
     if os.path.exists(output_folder) == False:
         # create output directory if not exists
@@ -76,7 +77,7 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
             name = df.loc[index, 'NAME'].split(';')[0]
             # use 'NAME' of molecule as chemdistiller input filename
             output_file = os.path.join(output_folder, name+'.txt')
-            print_in_the_same_line("processing "+name)
+            print("processing molecule : "+name)
             with open(output_file, 'w') as f:
                 notation = 0
                 # notation for peak information
@@ -123,9 +124,11 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
                             peaks = peaks.split('*')
                             for peak in peaks:
                                 if len(peak) != 0:
-                                    indice += 1
                                     p = peak.split()
                                     if len(p) >= 2:
+                                        p1 = p[0].split()
+                                        p2 = p[1].split()
+                                        indice += 1
                                         f.write('\t\t\t\t' + str(indice) + ',' + str(p[0].strip()) +
                                                 ',' + str(p[1].strip()) + '\n')
     print("Completed.")
