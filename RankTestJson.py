@@ -68,6 +68,12 @@ def makeFile(lst, output_file):
 
 
 def run(jsonname, output_file):
+    """
+
+    :param jsonname: input for rank
+    :param output_file: result <No.> <InChIKey> <Rank>
+    :return: None
+    """
     if os.path.splitext(os.path.basename(jsonname))[1] != '.json':
         return
     df = getDF(jsonname)
