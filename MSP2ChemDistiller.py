@@ -121,6 +121,7 @@ def process_msp_to_cd(input, output_folder='', sample_file=''):
                             notation = -1
                             indice = 0
                             peaks = str(df.loc[index, 'peaks'])
+                            # try to store peaks in list
                             peaks = peaks.split('*')
                             for peak in peaks:
                                 if len(peak) != 0:
