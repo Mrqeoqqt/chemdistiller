@@ -6,7 +6,7 @@
     This is an external script that generates the rank for each candidate
     that was processed.
 
-python MSP2ChemDistiller.py <input_json_file> <outputfile>
+python RankTestJson.py <input_json_file> <outputfile>
 author: Mingyi Xue
 Date: June/16 2018
 """
