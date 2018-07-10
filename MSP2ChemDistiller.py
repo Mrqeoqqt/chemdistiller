@@ -7,7 +7,7 @@
     formats of MS2 spectra into internal data format for ChemDistiller.
 
 
-python MSP2ChemDistiller.py <input> mode (<output_folder>) (<sample_file>)
+python MSP2ChemDistiller.py <input> <mode> (<output_folder>) (<sample_file>)
 
 author: Mingyi Xue
 """

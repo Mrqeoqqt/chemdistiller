@@ -7,7 +7,7 @@
     that was processed.
     Dependency: chemdistiller.utils.inchi.inchikey_from_inchi
 
-python RankTestJson.py <input_json_file> mode <outputfile>
+python RankTestJson.py <input_json_file> <mode> <outputfile>
 author: Mingyi Xue
 Date: June/16 2018
 """
@@ -115,13 +115,13 @@ if __name__ == "__main__":
         # deal with parameters
         if len(sys.argv) <= 3:
             print("Not enough parameters!")
-            print("python MSP2ChemDistiller.py <input_json_file> mode <outputfile>")
+            print("python MSP2ChemDistiller.py <input_json_file> <mode> <outputfile>")
             quit()
         elif len(sys.argv) == 4:
             run(sys.argv[1], int(sys.argv[2]), sys.argv[3])
         else:
             print("parameter error...\n")
-            print("python MSP2ChemDistiller.py <input_json_file> mode <outputfile>")
+            print("python MSP2ChemDistiller.py <input_json_file> <mode> <outputfile>")
             quit()
         finish = datetime.datetime.now()
         print("Time cost:%f s" % (finish - start).seconds)
