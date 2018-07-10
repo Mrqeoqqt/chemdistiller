@@ -5,8 +5,9 @@
 ==============================================================================
     This is an external script that generates the rank for each candidate
     that was processed.
+    Dependency: chemdistiller.utils.inchi.inchikey_from_inchi
 
-python RankTestJson.py <input_json_file> <outputfile>
+python RankTestJson.py <input_json_file> mode <outputfile>
 author: Mingyi Xue
 Date: June/16 2018
 """
@@ -33,25 +34,47 @@ def getDF(jsonname):
     return df
 
 
-def seekRank(df):
+def seekRank(df, mode):
     # inchi.inchikey_from_inchi
     # usage : the same way in html_report.generate_candidate_html
+    assert mode in {0, 1}
     lst = []
     for index, row in df.iterrows():
-        target = row['parameters.db_molecule_name']
+        target_inchikey = ''
+        if pd.isnull(row['parameters.inchi']) | \
+                len(str(row['parameters.inchi']).strip()) == 0:
+            if 'parameters.inchikey' not in row.index:
+                lst.append((row['parameters.db_molecule_name'], 'No inchi/inchikey'))
+                continue
+            else:
+                target_inchikey = row['parameters.inchikey']
+        else:
+            inchi = 'InChI=1S/%s' % row['parameters.inchi']
+            target_inchikey = inchikey_from_inchi(inchi)
         content = row['peaks'][0]
-        annotations = content['annotations'][0]
+        annotations = []
+        if 'annotations' in content.keys():
+            annotations = content['annotations'][0]
+        else:
+            if mode == 1:
+                lst.append((row['parameters.db_molecule_name'], 'No annotations'))
+            elif mode == 0:
+                lst.append((target_inchikey, 'No annotations'))
+            continue
         candidates = annotations['mol_candidates']
         indice = 0
         i = 0
         for c in candidates:
             inchi = 'InChI=1S/%s' % c['InChI']
             inchikey = inchikey_from_inchi(inchi)
-            i +=1
-            if target == inchikey:
+            i += 1
+            if target_inchikey == inchikey:
                 indice = i
                 break
-        lst.append((target, indice))
+        if mode == 1:
+            lst.append((row['parameters.db_molecule_name'], indice))
+        elif mode == 0:
+            lst.append((target_inchikey, indice))
     return lst
 
 
@@ -67,7 +90,7 @@ def makeFile(lst, output_file):
     return
 
 
-def run(jsonname, output_file):
+def run(jsonname, mode, output_file):
     """
 
     :param jsonname: input for rank
@@ -77,27 +100,34 @@ def run(jsonname, output_file):
     if os.path.splitext(os.path.basename(jsonname))[1] != '.json':
         return
     df = getDF(jsonname)
-    lst = seekRank(df)
+    lst = seekRank(df, mode)
     makeFile(lst, output_file)
     return
 
 
 if __name__ == "__main__":
     # copy from import.py
-    start = datetime.datetime.now()
-    if sys.byteorder != 'little':
-        print('Only little endian machines currently supported! bye bye ....')
-        quit()
-    # deal with parameters
-    if len(sys.argv) <= 2:
-        print("Files needed!")
-        print("python MSP2ChemDistiller.py <input_json_file> <outputfile>")
-        quit()
-    elif len(sys.argv) == 3:
-        run(sys.argv[1], sys.argv[2])
-    else:
-        print("parameter error...\n")
-        print("python MSP2ChemDistiller.py <input_json_file> <outputfile>")
-        quit()
-    finish = datetime.datetime.now()
-    print("Time cost:%f s" % (finish - start).seconds)
+    try:
+        start = datetime.datetime.now()
+        if sys.byteorder != 'little':
+            print('Only little endian machines currently supported! bye bye ....')
+            quit()
+        # deal with parameters
+        if len(sys.argv) <= 3:
+            print("Not enough parameters!")
+            print("python MSP2ChemDistiller.py <input_json_file> mode <outputfile>")
+            quit()
+        elif len(sys.argv) == 4:
+            run(sys.argv[1], int(sys.argv[2]), sys.argv[3])
+        else:
+            print("parameter error...\n")
+            print("python MSP2ChemDistiller.py <input_json_file> mode <outputfile>")
+            quit()
+        finish = datetime.datetime.now()
+        print("Time cost:%f s" % (finish - start).seconds)
+    except AssertionError as a:
+        print('''parameter [mode] accept values 0, 1.
+                0 indicates using INCHIKEY in output,
+                1 indicates using db_molecule_name in output.''')
+    except ValueError as v:
+        print("Value Error!")

@@ -11,8 +11,9 @@ import numpy as np
 import os
 import sys
 import datetime
+import time
 import re
-from chemdistiller.utils.sysutils import print_in_the_same_line
+
 
 def read_from_file(filename):
     """
@@ -21,10 +22,11 @@ def read_from_file(filename):
     :param filename: an input file
     :return: pandas.DataFrame
     """
+    start = time.time()
     df = pd.DataFrame(data=[], index=[], columns=[])
     with open(filename, 'r') as f:
         i = 0
-        print_in_the_same_line("processing file %s to dataframe" % filename)
+        print("processing file %s to dataframe" % filename)
         # initialize a dataframe and insert a column named 'peaks'
         for line in f:
             line = str(line.lstrip().rstrip())
@@ -44,20 +46,27 @@ def read_from_file(filename):
                 if ':' in line:
                     # other info
                     s = line.split(':', 1)
-                    df.loc[i, s[0]] = s[1]
+                    if 'PRECURSOR' in s[0].upper():
+                        # unify precursor_type and precursortype
+                        if 'T' in s[0].upper():
+                            df.loc[i, 'PRECURSORTYPE'] = s[1]
+                        if 'M' in s[0].upper():
+                            df.loc[i, 'PRECURSORMZ'] = s[1]
+                    else:
+                        df.loc[i, s[0].upper()] = s[1]
             else:
                 if i > 0:
                     df.loc[i, 'peaks'] = ''
                     i = -i
                     # a notation to recognize if df.loc[i, 'peaks'] is empty
-                df.loc[-i, 'peaks'] = str(df.loc[-i, 'peaks']) + str(line) + '*'
-
-                # peaks info, seperated by '*'
-        print_in_the_same_line("loaded data from %s." % filename)
+                df.loc[-i, 'peaks'] = str(df.loc[-i, 'peaks']) + line.strip() + '\n'
+        print("loaded data from %s." % filename)
+        end = time.time()
+        print("time consumed %lf sec." % (end-start))
     return df
 
 
-def write_to_file(df, filename):
+def __write_to_file(df, filename):
     """
     write a DataFrame to textfile
     :param df: pandas.DataFrame
@@ -65,7 +74,7 @@ def write_to_file(df, filename):
     :return: None
     """
     with open(filename, 'w') as f:
-        print_in_the_same_line("writing dataframe to %s" % filename)
+        print("writing dataframe to %s" % filename)
         # for (k, v) in df.iteritems():
         #     if k == 'peaks':
         #         continue
@@ -85,13 +94,12 @@ def write_to_file(df, filename):
                 else:
                     continue
             peaks = str(df.loc[index, 'peaks'])
-            peaks = peaks.split('*')
+            peaks = peaks.split('\n')
             for peak in peaks:
-                if len(peak) != 0:
-                    f.write(str(peak) + '\n')
+                f.write(peak + '\n')
             f.write('\n')
 
-        print_in_the_same_line("loaded data to %s" % filename)
+        print("loaded data to %s" % filename)
     return
 
 def MSP_run(input,output_folder=''):
@@ -126,7 +134,7 @@ def MSP_run(input,output_folder=''):
                 print("output folder does not exist, creating...")
                 os.mkdir(output_folder)
             print("Output folder:%s" % output_folder)
-            write_to_file(df, s)
+            __write_to_file(df, s)
         else:
             output_folder = os.path.join(input_folder, 'output')
             s = os.path.join(output_folder, filename)
@@ -134,7 +142,7 @@ def MSP_run(input,output_folder=''):
                 print("output folder does not exist, creating...")
                 os.mkdir(output_folder)
             print("Output folder:%s" % output_folder)
-            write_to_file(df, s)
+            __write_to_file(df, s)
 
 
 if __name__ == '__main__':
@@ -147,11 +155,11 @@ if __name__ == '__main__':
         MSP_run(sys.argv[1])
         finish = datetime.datetime.now()
         print("Finished.")
-        print("time cost:%d s" % (finish-start).seconds)
+        print("total time cost:%d s" % (finish-start).seconds)
     elif len(sys.argv) == 3:
         MSP_run(sys.argv[1], sys.argv[2])
         finish = datetime.datetime.now()
-        print("time cost:%d s" % (finish - start).seconds)
+        print("total time cost:%d s" % (finish - start).seconds)
         print("Finished.")
     else:
         print("Too many parameters.")
